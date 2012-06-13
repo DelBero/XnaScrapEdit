@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Globalization;
 
 namespace CogaenEditorControls.Controls
 {
@@ -19,43 +20,50 @@ namespace CogaenEditorControls.Controls
     /// </summary>
     public partial class IntegerTextBox : TextBox
     {
-        private string m_oldText;
+        #region Increment
+        public static readonly DependencyProperty IncrementProperty =
+        DependencyProperty.Register("Increment", typeof(int),
+        typeof(IntegerTextBox), new FrameworkPropertyMetadata(1, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnIncrementChanged));
 
-        //public static readonly DependencyProperty ValueProperty =
-        //DependencyProperty.Register("Value", typeof(int),
-        //typeof(IntegerTextBox), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnValueChanged));
-
-        //public int Value
-        //{
-        //    get
-        //    {
-        //        return (int)GetValue(ValueProperty);
-        //    }
-        //    set
-        //    {
-        //        if (Value != value)
-        //        {
-        //            SetValue(ValueProperty, value);
-        //            this.Text = Value.ToString();
-        //        }
-        //    }
-        //}
-
-        public static readonly DependencyProperty TrimProperty =
-        DependencyProperty.Register("Trim", typeof(bool),
-        typeof(IntegerTextBox), new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnTrimChanged));
-
-        public bool Trim
+        public int Increment
         {
             get
             {
-                return (bool)GetValue(TrimProperty);
+                return (int)GetValue(IncrementProperty);
             }
             set
             {
-                SetValue(TrimProperty, value);
+                SetValue(IncrementProperty, value);
             }
         }
+
+        private static void OnIncrementChanged(DependencyObject sender, DependencyPropertyChangedEventArgs eventArgs)
+        {
+            if (sender is IntegerTextBox)
+            {
+                IntegerTextBox tx = sender as IntegerTextBox;
+                tx.Increment = (int)eventArgs.NewValue;
+            }
+        }
+
+
+        private void OnMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            int iValue;
+            if (int.TryParse(this.Text, System.Globalization.NumberStyles.Float, CultureInfo.GetCultureInfo("en-US").NumberFormat, out iValue))
+            {
+                KeyStates alt = Keyboard.GetKeyStates(Key.LeftAlt);
+                int alter = 1;
+                if (alt == KeyStates.Down)
+                    alter = 10;
+                if (e.Delta > 0)
+                    iValue += Increment * alter;
+                else if (e.Delta < 0)
+                    iValue -= Increment * alter;
+                this.Text = iValue.ToString(CultureInfo.GetCultureInfo("en-US").NumberFormat);
+            }
+        }
+        #endregion
 
         public IntegerTextBox()
         {
@@ -66,53 +74,55 @@ namespace CogaenEditorControls.Controls
         {
             e.Handled = true;
             int selectionPos = this.SelectionStart;
-            if (checkIfNumeric())
-                m_oldText = this.Text;
-            else
+            foreach (TextChange tc in e.Changes)
             {
-                this.Text = m_oldText;
-                --selectionPos;
-                if (selectionPos < 0)
-                    selectionPos = 0;
+                this.Text = makeInt(this.Text, tc);
             }
-
             this.SelectionStart = selectionPos;
             //base.OnTextChanged(e);
         }
 
-        private bool checkIfNumeric()
+        private string makeInt(string s, TextChange tc)
         {
-            if (this.Text.Length == 0)
-                return true;
+            // removing is free
+            if (tc.AddedLength <= 0)
+                return s;
+
+            StringBuilder sb = new StringBuilder();
+            int start = 0;
+            if (s[start] == '-')
+            {
+                sb.Append(s[start++]);
+
+            }
+            for (int i = start; i < s.Length; ++i)
+            {
+                if (s[i] >= '0' && s[i] <= '9')
+                {
+                    sb.Append(s[i]);
+                }
+            }
+            return sb.ToString();
+        }
+
+        private void trim()
+        {
             int i;
-            if (Int32.TryParse(this.Text, out i))
+            if (int.TryParse(this.Text, NumberStyles.Float, CultureInfo.GetCultureInfo("en-US").NumberFormat, out i))
             {
-                //Value = i;
-                if (Trim)
-                    this.Text = i.ToString();
-                return true;
+                this.Text = i.ToString(CultureInfo.GetCultureInfo("en-US").NumberFormat);
             }
-            else
-                return false;
         }
 
-        //private static void OnValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs eventArgs)
-        //{
-        //    if (sender is IntegerTextBox)
-        //    {
-        //        IntegerTextBox tx = sender as IntegerTextBox;
-        //        tx.Value = (int)eventArgs.NewValue;
-        //    }
-        //}
-
-        private static void OnTrimChanged(DependencyObject sender, DependencyPropertyChangedEventArgs eventArgs)
+        private void TextBox_Validate(object sender, RoutedEventArgs e)
         {
-            if (sender is IntegerTextBox)
-            {
-                IntegerTextBox tx = sender as IntegerTextBox;
-                tx.Trim = (bool)eventArgs.NewValue;
-            }
+            trim();
         }
 
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter || e.Key == Key.Return)
+                trim();
+        }
     }
 }

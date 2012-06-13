@@ -22,11 +22,13 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
         <cec:FloatParameterBox Grid.Row="0"
                                 x:Name="m_FloatParameterBox"
                                Value="{Binding Path=Value, Mode=TwoWay}"
-                               Increment="{Binding Path=Increment, Mode=TwoWay}"
-                               MaxHeight="26"></cec:FloatParameterBox>
+                               MaxHeight="26" Height="26" Width="240"></cec:FloatParameterBox>
+            <TextBlock x:Name="m_FloatParameterText" Text="{Binding Path=Value}"></TextBlock>
+        </StackPanel>
         <StackPanel Grid.Row="1">
         <cec:ComboParameterBox  x:Name="m_comboBox"></cec:ComboParameterBox>
         <Button Click="Button_Click">Increment</Button></StackPanel>

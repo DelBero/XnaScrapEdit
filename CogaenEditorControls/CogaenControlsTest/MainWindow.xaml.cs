@@ -66,6 +66,7 @@ namespace CogaenControlsTest
 
             testParam = new ParameterTest("1,2,3,4");
             m_FloatParameterBox.DataContext = testParam;
+            m_FloatParameterText.DataContext = testParam;
 
             comboTester = new ComboBoxTester();
             comboTester.Values.Add("Mesh1");

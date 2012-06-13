@@ -20,43 +20,65 @@ namespace CogaenEditorControls.Controls
     /// </summary>
     public partial class FloatTextBox : TextBox
     {
-        private string m_oldText;
+        #region Increment
+        public static readonly DependencyProperty IncrementProperty =
+        DependencyProperty.Register("Increment", typeof(float),
+        typeof(FloatTextBox), new FrameworkPropertyMetadata(1.0f, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnIncrementChanged));
 
-        //public static readonly DependencyProperty ValueProperty =
-        //DependencyProperty.Register("Value", typeof(float),
-        //typeof(FloatTextBox), new FrameworkPropertyMetadata(0.0f, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnValueChanged));
-
-        //public float Value
-        //{
-        //    get
-        //    {
-        //        return (float)GetValue(ValueProperty);
-        //    }
-        //    set
-        //    {
-        //        if (Value != value)
-        //        {
-        //            SetValue(ValueProperty, value);
-        //            this.Text = Value.ToString();
-        //        }
-        //    }
-        //}
-
-        public static readonly DependencyProperty TrimProperty =
-        DependencyProperty.Register("Trim", typeof(bool),
-        typeof(FloatTextBox), new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnTrimChanged));
-
-        public bool Trim
+        public float Increment
         {
             get
             {
-                return (bool)GetValue(TrimProperty);
+                return (float)GetValue(IncrementProperty);
             }
             set
             {
-                SetValue(TrimProperty, value);
+                SetValue(IncrementProperty, value);
             }
         }
+
+        private static void OnIncrementChanged(DependencyObject sender, DependencyPropertyChangedEventArgs eventArgs)
+        {
+            if (sender is FloatTextBox)
+            {
+                FloatTextBox tx = sender as FloatTextBox;
+                tx.Increment = (float)eventArgs.NewValue;
+            }
+        }
+
+
+        private void OnMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            float iValue;
+            if (float.TryParse(this.Text, System.Globalization.NumberStyles.Float, CultureInfo.GetCultureInfo("en-US").NumberFormat, out iValue))
+            {
+                KeyStates alt = Keyboard.GetKeyStates(Key.LeftAlt);
+                KeyStates leftCtrl = Keyboard.GetKeyStates(Key.LeftCtrl);
+                KeyStates rightCtrl = Keyboard.GetKeyStates(Key.RightCtrl);
+                float alter = 1.0f;
+                if (alt == KeyStates.Down)
+                    alter = 10.0f;
+                if (leftCtrl == KeyStates.Down || rightCtrl == KeyStates.Down)
+                    alter = 0.1f;
+                if (e.Delta > 0)
+                    iValue += Increment * alter;
+                else if (e.Delta < 0)
+                    iValue -= Increment * alter;
+                this.Text = iValue.ToString(CultureInfo.GetCultureInfo("en-US").NumberFormat);
+            }
+        }
+        #endregion
+
+        #region events
+        public delegate void ValueChangedEventHandler(object sender, EventArgs e);
+        public event ValueChangedEventHandler ValueChanged;
+
+        private void OnValueChanged()
+        {
+            if (ValueChanged != null)
+                ValueChanged(this, EventArgs.Empty);
+        }
+        #endregion
 
         public FloatTextBox()
         {
@@ -67,54 +89,72 @@ namespace CogaenEditorControls.Controls
         {
             e.Handled = true;
             int selectionPos = this.SelectionStart;
-            if (checkIfNumeric())
-                m_oldText = this.Text;
-            else
+            foreach (TextChange tc in e.Changes)
             {
-                this.Text = m_oldText;
-                --selectionPos;
-                if (selectionPos < 0)
-                    selectionPos = 0;
+                this.Text = makeFloat(this.Text, tc);
             }
-
             this.SelectionStart = selectionPos;
+            OnValueChanged();
             //base.OnTextChanged(e);
         }
 
-        private bool checkIfNumeric()
+        private string makeFloat(string s, TextChange tc)
         {
-            if (this.Text.Length == 0)
-                return true;
+            // removing is free
+            if (tc.AddedLength <= 0)
+                return s;
+            // check new segment for non float characters
+            bool newComma = false;
+            int newCommaPos = -1;
+            for (int i = tc.Offset; i < s.Length; ++i)
+            {
+                if (s[i] == '.')
+                {
+                    newComma = true;
+                    newCommaPos = i;
+                    break;
+                }
+            }
+
+            StringBuilder sb = new StringBuilder();
+            int start = 0;
+            if (s[start] == '-')
+            {
+                sb.Append(s[start++]);
+
+            }
+            for (int i = start; i < s.Length; ++i)
+            {
+                if (s[i] >= '0' && s[i] <= '9')
+                {
+                    sb.Append(s[i]);
+                }
+                else if (s[i] == '.' && (i == newCommaPos || !newComma))
+                {
+                    sb.Append(s[i]);
+                }
+            }
+            return sb.ToString();
+        }
+
+        private void trim()
+        {
             float i;
             if (Single.TryParse(this.Text, NumberStyles.Float, CultureInfo.GetCultureInfo("en-US").NumberFormat, out i))
             {
-                //Value = i;
-                if (Trim)
-                    this.Text = i.ToString(CultureInfo.GetCultureInfo("en-US").NumberFormat);
-                return true;
-            }
-            else
-            {
-                return false;
+                this.Text = i.ToString(CultureInfo.GetCultureInfo("en-US").NumberFormat);
             }
         }
 
-        //private static void OnValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs eventArgs)
-        //{
-        //    if (sender is FloatTextBox)
-        //    {
-        //        FloatTextBox tx = sender as FloatTextBox;
-        //        tx.Value = (float)eventArgs.NewValue;
-        //    }
-        //}
-
-        private static void OnTrimChanged(DependencyObject sender, DependencyPropertyChangedEventArgs eventArgs)
+        private void TextBox_Validate(object sender, RoutedEventArgs e)
         {
-            if (sender is FloatTextBox)
-            {
-                FloatTextBox tx = sender as FloatTextBox;
-                tx.Trim = (bool)eventArgs.NewValue;
-            }
+            trim();
+        }
+
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter || e.Key == Key.Return)
+                trim();
         }
 
     }
