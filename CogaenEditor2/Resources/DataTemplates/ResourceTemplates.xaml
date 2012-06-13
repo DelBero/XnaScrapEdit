@@ -1,0 +1,66 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:dataitems="clr-namespace:CogaenDataItems.DataItems;assembly=CogaenDataItems">
+
+    <DataTemplate x:Key="PairContens">
+        <TextBlock Text="{Binding Path=Key}">
+        </TextBlock>
+    </DataTemplate>
+    
+    <HierarchicalDataTemplate x:Key="PairFileWithContens" 
+                                      ItemsSource="{Binding Path=Value}"
+                                      ItemTemplate="{StaticResource PairContens}">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding Path=Key}">
+            </TextBlock>
+        </StackPanel>
+    </HierarchicalDataTemplate>
+    <!-- Mesh Resources -->
+    <DataTemplate x:Key="ResourceHeaderMeshTemplate">
+        <StackPanel Orientation="Horizontal">
+            <Image Source="/CogaenEditor2;component/icons/folder_small.png"></Image>
+            <TextBlock Text="Meshes">
+            </TextBlock>
+        </StackPanel>
+    </DataTemplate>
+    <!-- Texture Resources -->
+    <DataTemplate x:Key="ResourceHeaderTextureTemplate">
+        <StackPanel Orientation="Horizontal">
+            <Image Source="/CogaenEditor2;component/icons/folder_small.png"></Image>
+            <TextBlock Text="Textures"/>
+        </StackPanel>
+    </DataTemplate>
+    <!-- ResourceFolder -->
+    <HierarchicalDataTemplate DataType="{x:Type dataitems:ResourceFolder}" ItemsSource="{Binding Path= Resources}">
+        <StackPanel Orientation="Horizontal">
+            <Image Source="/CogaenEditor2;component/icons/folder_small.png"></Image>
+            <TextBlock Margin="0,0,10,0" HorizontalAlignment="Stretch" Text="{Binding Path=Name}" />
+        </StackPanel>
+    </HierarchicalDataTemplate>
+    <!-- Mesh -->
+    <DataTemplate DataType="{x:Type dataitems:MeshResource}">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Margin="0,0,10,0" HorizontalAlignment="Stretch" Text="{Binding Path=Name}">
+                    <TextBlock.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Open" Command="Open" CommandParameter="{Binding}"></MenuItem>
+                        </ContextMenu>
+                    </TextBlock.ContextMenu>
+            </TextBlock>
+        </StackPanel>
+    </DataTemplate>
+    <!-- Texture -->
+    <DataTemplate DataType="{x:Type dataitems:TextureResource}">
+        <StackPanel Orientation="Horizontal">
+            <Image Source="/CogaenEditor2;component/icons/insert_picture_small.png"></Image>
+            <TextBlock Margin="0,0,10,0" HorizontalAlignment="Stretch" Text="{Binding Path=Name}" />
+        </StackPanel>
+    </DataTemplate>
+    <!-- Material -->
+    <DataTemplate DataType="{x:Type dataitems:MaterialResource}">
+        <StackPanel Orientation="Horizontal">
+            <!--<Image Source="/CogaenEditor;component/icons/insert_picture_small.png"></Image>-->
+            <TextBlock Margin="0,0,10,0" HorizontalAlignment="Stretch" Text="{Binding Path=Name}" />
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

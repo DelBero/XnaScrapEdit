@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="CogaenEditorControls.Controls.ColorChooser"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:my="clr-namespace:CogaenEditorControls.Converter" 
+             mc:Ignorable="d"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             d:DesignHeight="27"
+             d:DesignWidth="92" xmlns:my1="clr-namespace:CogaenEditorControls.Controls"
+             x:Name="ColorChooser1">
+    <UserControl.Resources>
+        <my:StringColorConverter x:Key="StringColorConverter1" />
+        <my:ColorBrushConverter x:Key="ColorBrushConverter1" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="15"/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="0" Name="ColorBorder" Background="{Binding ElementName=ColorChooser1, Path=Color, Converter={StaticResource ColorBrushConverter1}}">
+        </Border>
+        <Button Name="DefinerButton"
+                Content="..."
+                Grid.Column="1"
+                Background="WhiteSmoke"
+                Click="DefinerButton_Click">
+        </Button>
+        <Popup Name="ColorDefinerPopup"
+               IsOpen="False"
+               PlacementTarget="{Binding ElementName=DefinerButton}"
+               Placement="Bottom"
+               >
+            <my1:ColorDefiner x:Name="ColorDefiner"
+                              Color="{Binding ElementName=ColorChooser1, Path=Color}"
+                              MouseLeave="ColorDefiner_MouseLeave">
+            </my1:ColorDefiner>
+        </Popup>
+    </Grid>
+</UserControl>

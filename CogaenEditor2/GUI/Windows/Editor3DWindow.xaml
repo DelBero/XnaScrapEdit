@@ -1,0 +1,85 @@
+﻿<Window x:Class="CogaenEditor.Windows.Editor3DWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:editor3D="clr-namespace:CogaenEditor._3DEditor"
+        xmlns:gui="clr-namespace:CogaenEditor.GuiElements"
+        Title="Editor3DWindow" Height="600" Width="800" Closing="Window_Closing" xmlns:my="clr-namespace:CogaenEditor.Windows">
+    
+    <Window.Resources>
+        <DataTemplate x:Key="PositionTemplate">
+            <Line X1="-10" Y1="0"
+                X2="10" Y2="0"
+                Stroke="Red"
+                StrokeThickness="2"/>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid x:Name="MainGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="180" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="29"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <ToolBar Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <ToolBarPanel HorizontalAlignment="Left" Name="toolBarPanel1" VerticalAlignment="Top" Orientation="Vertical">
+                <ComboBox Height="23" Name="comboBox1" Width="120" SelectionChanged="comboBox1_SelectionChanged" 
+                          ItemsSource="{Binding Path=InputModes}">
+                </ComboBox>
+            </ToolBarPanel>
+        </ToolBar>
+        <Grid Grid.Row="1" Grid.Column="0" Background="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=my:Editor3DWindow, AncestorLevel=1}, Path=Editor.Background}">
+        <Canvas Grid.Row="1"
+                Name="m_canvas"
+                MouseDown="Viewport3D_MouseDown" 
+                MouseMove="Viewport3D_MouseMove" 
+                MouseUp="Viewport3D_MouseUp"
+                MouseWheel="m_viewport_MouseWheel"
+                Background="Transparent" Grid.ColumnSpan="2" >
+        </Canvas>
+        <!--<Viewbox Name="m_viewbox" >-->
+        <Viewport3D Grid.Row="1" 
+                    Grid.Column="0" 
+                    Name="m_viewport"  ClipToBounds="True" Grid.ColumnSpan="1"
+                    MouseDown="Viewport3D_MouseDown" 
+                    MouseMove="Viewport3D_MouseMove" 
+                    MouseUp="Viewport3D_MouseUp" MouseWheel="m_viewport_MouseWheel">
+                <Viewport3D.Camera>
+                    <!--<PerspectiveCamera Position="{Binding Source={x:Static Application.Current}, Path=Editor3D.CameraPosition, Mode=TwoWay}" LookDirection="0,0,-1" FieldOfView="60" />-->
+                    <PerspectiveCamera x:Name="m_perspectiveCamera" Position="-20,20,20" LookDirection="1,-1,-1" FieldOfView="60">
+                    </PerspectiveCamera>
+                </Viewport3D.Camera>
+
+                <Viewport3D.Children>
+                    <ModelVisual3D>
+                        <ModelVisual3D.Content>
+                            <DirectionalLight Color="#FFFFFF" Direction="-0.612372,-0.5,-0.612372" />
+                        </ModelVisual3D.Content>
+                </ModelVisual3D>
+                    <ModelVisual3D x:Name="m_models">                        
+                    </ModelVisual3D>
+                </Viewport3D.Children>
+            </Viewport3D>
+        </Grid>
+        <StackPanel Grid.Column="1" Grid.Row="1">
+            <TextBlock Text="{Binding Path=Editor.Selected.Name, RelativeSource={RelativeSource FindAncestor, AncestorType=my:Editor3DWindow}}" HorizontalAlignment="Center" />
+            <GroupBox Header="Position" HorizontalAlignment="Stretch" Name="m_groupBoxPosition" VerticalAlignment="Top" >
+                    <StackPanel>
+                    <gui:PositionControl Value="{Binding Path=Editor.Selected.Position, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType=my:Editor3DWindow}}" />
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Scale" HorizontalAlignment="Stretch" Name="m_groupBoxScale" VerticalAlignment="Top" >
+                <StackPanel>
+                    <gui:PositionControl Value="{Binding Path=Editor.Selected.Scale, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType=my:Editor3DWindow}}" />
+                </StackPanel>
+            </GroupBox>
+            <!--<GroupBox Header="Orientation" HorizontalAlignment="Stretch" Name="m_groupBoxOrientation" VerticalAlignment="Top" >
+                <StackPanel>
+                    <gui:OrientationControl Value="{Binding Path=Editor.Selected.Orientation, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType=my:Editor3DWindow}}" />
+                </StackPanel>
+            </GroupBox>-->
+        </StackPanel>
+        <!--</Viewbox>-->
+    </Grid>
+</Window>

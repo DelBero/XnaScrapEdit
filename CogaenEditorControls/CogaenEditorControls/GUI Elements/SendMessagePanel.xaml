@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="CogaenEditorControls.GUI_Elements.SendMessagePanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:sel="clr-namespace:CogaenEditorControls.Resources.TemplateSelectors"
+             mc:Ignorable="d" d:DataContext="{d:DesignData ../SampleData/SampleMessage.xaml}" d:DesignHeight="300" d:DesignWidth="300"
+             DataContextChanged="UserControl_DataContextChanged">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="./Templates/MessageTemplates.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+
+            <sel:MessageParameterTemplateSelector x:Key="MessageParameterTemplateSelector"/>
+
+            <DataTemplate x:Key="MessageTemplate">
+                <StackPanel Orientation="Vertical">
+                    <CheckBox Name="m_manualUpdate" HorizontalAlignment="Left" IsChecked="{Binding Path=ManualUpdate}">Manual update</CheckBox>
+                    <GroupBox>
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Path=Name}"/>
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <TreeView ItemsSource="{Binding Path=Parameter.Params}" ItemTemplateSelector="{StaticResource MessageParameterTemplateSelector}">
+                        </TreeView>
+                    </GroupBox>
+                    <Button HorizontalAlignment="Center" MinWidth="80" IsEnabled="{Binding ElementName=m_manualUpdate, Path=IsChecked}" Click="Button_Click">Send</Button>
+                </StackPanel>
+            </DataTemplate>
+
+        </ResourceDictionary>
+
+    </UserControl.Resources>
+        <ItemsControl ItemsSource="{Binding Path=Messages}" ItemTemplate="{StaticResource ResourceKey=MessageTemplate}" 
+                 HorizontalContentAlignment="Stretch"/>
+</UserControl>

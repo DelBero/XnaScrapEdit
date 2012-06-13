@@ -1,0 +1,431 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!--  This is the file that defines the actual layout and type of the commands.
+        It is divided in different sections (e.g. command definition, command
+        placement, ...), with each defining a specific set of properties.
+        See the comment before each section for more details about how to
+        use it. -->
+
+  <!--  The VSCT compiler (the tool that translates this file into the binary 
+        format that VisualStudio will consume) has the ability to run a preprocessor 
+        on the vsct file; this preprocessor is (usually) the C++ preprocessor, so 
+        it is possible to define includes and macros with the same syntax used 
+        in C++ files. Using this ability of the compiler here, we include some files 
+        defining some of the constants that we will use inside the file. -->
+
+  <!--This is the file that defines the IDs for all the commands exposed by VisualStudio. -->
+  <Extern href="stdidcmd.h"/>
+
+  <!--This header contains the command ids for the menus provided by the shell. -->
+  <Extern href="vsshlids.h"/>
+
+  <!--Definition of some VSCT specific constants. In this sample we use it for the IDs inside the guidOfficeIcon group. -->
+  <Extern href="msobtnid.h"/>
+
+
+  <!--Defines VK_INSERT -->
+  <Extern href="virtkeys.h"/>
+  
+
+
+
+  <!--The Commands section is where we the commands, menus and menu groups are defined.
+      This section uses a Guid to identify the package that provides the command defined inside it. -->
+  <Commands package="guidCogaenEditExtensionPkg">
+    <!-- Inside this section we have different sub-sections: one for the menus, another  
+    for the menu groups, one for the buttons (the actual commands), one for the combos 
+    and the last one for the bitmaps used. Each element is identified by a command id that  
+    is a unique pair of guid and numeric identifier; the guid part of the identifier is usually  
+    called "command set" and is used to group different command inside a logically related  
+    group; your package should define its own command set in order to avoid collisions  
+    with command ids defined by other packages. -->
+
+    
+    <!--This is the sub-section that defines the menus and toolbars.-->
+    <Menus>
+      <!--  To define an element in this group you need an ID, a parent group, a display priority,
+            a menu type, a name and a default text. -->
+      <!-- Editor Toolbar -->
+      <!-- old: ID_COGAEN_EDT_TLB -->
+      <Menu guid="guidCogaenEditExtensionCmdSet" id="ID_COGAEN_EDT_TLB" priority="0x0000" type="Toolbar">
+        <Parent guid="guidCogaenEditExtensionCmdSet" id="0"/>
+        <Strings>
+          <ButtonText>CogaenEdit Toolbar</ButtonText>
+          <CommandName>CogaenEdit Toolbar</CommandName>
+        </Strings>
+      </Menu>
+      <!-- Editor Context Menu -->
+      <Menu guid="guidCogaenEditExtensionCmdSet" id="IDMX_RTF" priority="0x0000" type="Context">
+        <Parent guid="guidCogaenEditExtensionCmdSet" id="0"/>
+        <Strings>
+          <ButtonText>CogaenEditExtension Context Menu</ButtonText>
+          <CommandName>CogaenEditExtensionContextMenu</CommandName>
+        </Strings>
+      </Menu>
+    </Menus>
+    
+    <!-- In this section you can define new menu groups. A menu group is a container for 
+         other menus or buttons (commands); from a visual point of view you can see the 
+         group as the part of a menu contained between two lines. The parent of a group 
+         must be a menu. -->
+    <Groups>
+
+      <Group guid="guidCogaenEditExtensionCmdSet" id="MyMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
+      </Group>
+      
+
+
+      <!--Editor menu group -->
+      <Group guid="guidCogaenEditExtensionCmdSet" id="IDG_RTF_EDITOR_CMDS" priority="0xFE00">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_EDIT"/>
+      </Group>
+
+      <!-- Toolbar groups -->
+      <Group guid="guidCogaenEditExtensionCmdSet" id="IDG_COGAEN_EDT_CONNECT" priority="0x0100">
+        <Parent guid="guidCogaenEditExtensionCmdSet" id="ID_COGAEN_EDT_TLB"/>
+      </Group>
+      <Group guid="guidCogaenEditExtensionCmdSet" id="IDG_COGAEN_EDT_EDITOR" priority="0x0101">
+        <Parent guid="guidCogaenEditExtensionCmdSet" id="ID_COGAEN_EDT_TLB"/>
+      </Group>
+      
+      <!--<Group guid="guidCogaenEditExtensionCmdSet" id="IDG_RTF_TLB_FONT1" priority="0x0100">
+        <Parent guid="guidCogaenEditExtensionCmdSet" id="ID_COGAEN_EDT_TLB"/>
+      </Group>-->
+      
+      <!--Context menu groups -->
+      <Group guid="guidSHLMainMenu" id="IDG_VS_EDIT_CUTCOPY" priority="0x0100">
+        <Parent guid="guidCogaenEditExtensionCmdSet" id="IDMX_RTF"/>
+      </Group>
+      <Group guid="guidCogaenEditExtensionCmdSet" id="IDG_RTF_CTX_PROPS" priority="0x0200">
+        <Parent guid="guidCogaenEditExtensionCmdSet" id="IDMX_RTF"/>
+      </Group>
+      <Group guid="guidSharedMenuGroup" id="IDG_VS_FORMAT_FONTFACE" priority="0x0300">
+        <Parent guid="guidCogaenEditExtensionCmdSet" id="IDMX_RTF"/>
+      </Group>
+
+      <Group guid="guidCogaenEditExtensionCmdSet" id="ProjectItemContextGroup" priority="0x600">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_PROJ_REFERENCE"/>
+      </Group>
+
+    </Groups>
+    
+    <!--Buttons section. -->
+    <!--This section defines the elements the user can interact with, like a menu command or a button 
+        or combo box in a toolbar. -->
+    <Buttons>
+      <!--To define a menu group you have to specify its ID, the parent menu and its display priority. 
+          The command is visible and enabled by default. If you need to change the visibility, status, etc, you can use
+          the CommandFlag node.
+          You can add more than one CommandFlag node e.g.:
+              <CommandFlag>DefaultInvisible</CommandFlag>
+              <CommandFlag>DynamicVisibility</CommandFlag>
+          If you do not want an image next to your command, remove the Icon node or set it to <Icon guid="guidOfficeIcon" id="msotcidNoIcon" /> -->
+
+      <Button guid="guidCogaenEditExtensionCmdSet" id="cmdidConnect" priority="0x0100" type="Button">
+        <Parent guid="guidCogaenEditExtensionCmdSet" id="IDG_COGAEN_EDT_CONNECT" />
+        <Icon guid="guidImagesBasic" id="bmpConnect" />
+        <Strings>
+          <CommandName>cmdidConnect</CommandName>
+          <ButtonText>Connect to Game</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidCogaenEditExtensionCmdSet" id="cmdidDisconnect" priority="0x0101" type="Button">
+        <Parent guid="guidCogaenEditExtensionCmdSet" id="IDG_COGAEN_EDT_CONNECT" />
+        <Icon guid="guidImagesBasic" id="bmpDisconnect" />
+        <Strings>
+          <CommandName>cmdidDisconnect</CommandName>
+          <ButtonText>Disconnect from Game</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidCogaenEditExtensionCmdSet" id="cmdidConvert2Macro" priority="0x0101" type="Button">
+        <Parent guid="guidCogaenEditExtensionCmdSet" id="IDG_COGAEN_EDT_EDITOR" />
+        <Icon guid="guidImagesBasic" id="bmpLogo" />
+        <Strings>
+          <CommandName>cmdidConvert2Macro</CommandName>
+          <ButtonText>Convert a Script to a Macro</ButtonText>
+        </Strings>
+      </Button>
+      
+      <Button guid="guidCogaenEditExtensionCmdSet" id="cmdidRunScript" priority="0x0100" type="Button">
+        <Parent guid="guidCogaenEditExtensionCmdSet" id="IDG_COGAEN_EDT_EDITOR" />
+        <Icon guid="guidImagesBasic" id="bmpLogo" />
+        <Strings>
+          <CommandName>cmdidRunScript</CommandName>
+          <ButtonText>Run the currently opended Script</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidCogaenEditExtensionCmdSet" id="cmdidConvert2Script" priority="0x0102" type="Button">
+        <Parent guid="guidCogaenEditExtensionCmdSet" id="IDG_COGAEN_EDT_EDITOR" />
+        <Icon guid="guidImagesBasic" id="bmpLogo" />
+        <Strings>
+          <CommandName>cmdidConvert2Script</CommandName>
+          <ButtonText>Convert a Macro to a Script</ButtonText>
+        </Strings>
+      </Button>
+
+      <!-- Tool window -->
+      <Button guid="guidCogaenEditExtensionCmdSet" id="cmdidCogaenEdit" priority="0x0100" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1"/>
+        <Icon guid="guidImages" id="bmpLogo" />
+        <Strings>
+          <CommandName>cmdidCogaenEdit</CommandName>
+          <ButtonText>Game Elements Window</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidCogaenEditExtensionCmdSet" id="cmdidMessageWindow" priority="0x0101" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1"/>
+        <Icon guid="guidImages" id="bmpLogo" />
+        <Strings>
+          <CommandName>cmdidMessageWindow</CommandName>
+          <ButtonText>Gameobject Message Window</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidCogaenEditExtensionCmdSet" id="cmdidLive2DWindow" priority="0x0102" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1"/>
+        <Icon guid="guidImages" id="bmpLogo" />
+        <Strings>
+          <CommandName>cmdidLive2DWindow</CommandName>
+          <ButtonText>Live Gameobjects Window</ButtonText>
+        </Strings>
+      </Button>
+
+
+
+      <Button guid="guidCogaenEditExtensionCmdSet" id="commandIDStrike" priority="0x0400" type="Button">
+        <Parent guid="guidSharedMenuGroup" id="IDG_VS_FORMAT_FONTFACE"/>
+        <Icon guid="guidOfficeIcon" id="msotcidStrikethrough"/>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DefaultDisabled</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <CommandName>&amp;Strike-through</CommandName>
+          <CanonicalName>Strike-through</CanonicalName>
+          <ButtonText>&amp;Strike-through</ButtonText>
+          <ToolTipText>Strikes through text</ToolTipText>
+        </Strings>
+      </Button>
+      
+      <!-- ContentReference -->
+      <Button guid="guidCogaenEditExtensionCmdSet" id="cmdidAddContentRef" priority="0x0100" type="Button">
+        <!--<Parent guid="guidSHLMainMenu" id="IDG_VS_PROJ_OPTIONS"/>--> <!-- For some reason this will group it next to Add Reference instead of IDG_VS_PROJ_REFERENCE -->
+        <Parent guid="guidCogaenEditExtensionCmdSet" id="ProjectItemContextGroup"/>
+        <Icon guid="guidImages" id="bmpLogo" />
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <CommandName>cmdidAddContentRef</CommandName>
+          <ButtonText>Add Content Reference</ButtonText>
+        </Strings>
+      </Button>
+
+    </Buttons>
+   
+    <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
+    <Bitmaps>
+      <!--  The bitmap id is defined in a way that is a little bit different from the others: 
+            the declaration starts with a guid for the bitmap strip, then there is the resource id of the 
+            bitmap strip containing the bitmaps and then there are the numeric ids of the elements used 
+            inside a button definition. An important aspect of this declaration is that the element id 
+            must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
+      <Bitmap guid="guidImages" href="Resources\Images_32bit.bmp" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows"/>
+      <Bitmap guid="guidImagesBasic" href="Resources\Images_basic_32bit.bmp" usedList="bmpConnect, bmpDisconnect, bmpLogo, bmpPicX, bmpPicArrows"/>
+      
+    </Bitmaps>
+ 
+  </Commands>
+
+
+  <!--  Within this section you can specify the set of commands defined somewhere else that your  
+        packages uses; for instance if your package uses the standard ‘Copy’ command, you don’t  
+        need to define it, because it is defined by the shell, but you have to use this section  
+        of the VSCT file to notify the shell that your package uses it using this section. -->
+  <!--  Note that with combo boxes we have effectively two commands in one. Below 
+        we have two pairs of commands; 1st pair commandIDFontName and commandIDFontNameHandler, 
+        2nd pair commandIDFontSize and commandIDFontSizeHandler. Note that: 
+        
+        - commandIDFontName and commandIDFontSize handle the displaying and setting of the font 
+          name and font size respectively 
+        - commandIDFontNameHandler and commandIDFontSizeHandler fill the drop down menus 
+          with the available font names and font sizes respectively 
+     -->
+  <!-- Note also that VS will call QueryStatus only on commandIDFontName and  
+       commandIDFontSize, but not on cmdFontNameHandler and commandIDFontSizeHandler whereas 
+       Exec will be called on all four commands. 
+       Note also that Exec will be called for commandIDFontName and commandIDFontSize for 
+       two cases; first to get the current font name or size and second to 
+       set the font name or size whereas the Exec call for commandIDFontNameHandler and  
+       commandIDFontSizeHandler always have the same meaning - fill the drop down menu. 
+       Finally, note that placement for the combo boxes is defined in the combo 
+       section below by the priority and not in the CommandPlacements section. -->
+  <UsedCommands>
+    <UsedCommand guid="guidVSStd97" id="cmdidBold"/>
+    <UsedCommand guid="guidVSStd97" id="cmdidItalic"/>
+    <UsedCommand guid="guidVSStd97" id="cmdidUnderline"/>
+    <UsedCommand guid="guidVSStd97" id="cmdidJustifyLeft"/>
+    <UsedCommand guid="guidVSStd97" id="cmdidJustifyCenter"/>
+    <UsedCommand guid="guidVSStd97" id="cmdidJustifyRight"/>
+    <UsedCommand guid="guidVSStd97" id="cmdidFontName"/>
+    <UsedCommand guid="guidVSStd97" id="cmdidFontSize"/>
+    <UsedCommand guid="guidVSStd97" id="cmdidCut"/>
+    <UsedCommand guid="guidVSStd97" id="cmdidCopy"/>
+    <UsedCommand guid="guidVSStd97" id="cmdidPaste"/>
+    <UsedCommand guid="guidVSStd97" id="cmdidDelete"/>
+    <UsedCommand guid="guidVSStd2K" id="ECMD_INSERT"/>
+    <UsedCommand guid="guidVSStd2K" id="ECMD_BULLETEDLIST"/>
+  </UsedCommands>
+  
+  <!--Inside this section, we have the ability to place menu groups inside some other menu or 
+      menu / commands inside other groups. 
+      For instance, it is possible to place one of VisualStudio's menus or commands inside one of our  
+      groups or one of our groups inside a menu defined somewhere else. -->
+  <CommandPlacements>
+    <!--Editor Toolbar -->
+    <!--<CommandPlacement guid="guidVSStd97" id="cmdidFontName" priority="0x0100">
+      <Parent guid="guidCogaenEditExtensionCmdSet" id="IDG_RTF_TLB_FONT_COMBOS"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVSStd97" id="cmdidFontSize" priority="0x0200">
+      <Parent guid="guidCogaenEditExtensionCmdSet" id="IDG_RTF_TLB_FONT_COMBOS"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVSStd97" id="cmdidBold" priority="0x0100">
+      <Parent guid="guidCogaenEditExtensionCmdSet" id="IDG_RTF_TLB_FONT1"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVSStd97" id="cmdidItalic" priority="0x0200">
+      <Parent guid="guidCogaenEditExtensionCmdSet" id="IDG_RTF_TLB_FONT1"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVSStd97" id="cmdidUnderline" priority="0x0300">
+      <Parent guid="guidCogaenEditExtensionCmdSet" id="IDG_RTF_TLB_FONT1"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidCogaenEditExtensionCmdSet" id="commandIDStrike" priority="0x0400">
+      <Parent guid="guidCogaenEditExtensionCmdSet" id="IDG_RTF_TLB_FONT1"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVSStd97" id="cmdidJustifyLeft" priority="0x0100">
+      <Parent guid="guidCogaenEditExtensionCmdSet" id="IDG_RTF_TLB_INDENT"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVSStd97" id="cmdidJustifyCenter" priority="0x0200">
+      <Parent guid="guidCogaenEditExtensionCmdSet" id="IDG_RTF_TLB_INDENT"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVSStd97" id="cmdidJustifyRight" priority="0x0300">
+      <Parent guid="guidCogaenEditExtensionCmdSet" id="IDG_RTF_TLB_INDENT"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVSStd2K" id="ECMD_BULLETEDLIST" priority="0x0100">
+      <Parent guid="guidCogaenEditExtensionCmdSet" id="IDG_RTF_TLB_BULLET"/>
+    </CommandPlacement>-->
+    
+    <!-- Editor context menu -->
+    <CommandPlacement guid="guidVSStd2K" id="ECMD_BULLETEDLIST" priority="0x0100">
+      <Parent guid="guidCogaenEditExtensionCmdSet" id="IDG_RTF_CTX_PROPS"/>
+    </CommandPlacement>
+
+    <!--<CommandPlacement guid="guidCogaenEditExtensionCmdSet" id="ProjectItemContextGroup" priority="0x0100">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_PROJ_REFERENCE"/>
+    </CommandPlacement>-->
+
+    <CommandPlacement guid="guidCogaenEditExtensionCmdSet" id="ProjectItemContextGroup" priority="0x600">
+      <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE"/>
+    </CommandPlacement>
+    
+    <CommandPlacement guid="guidCogaenEditExtensionCmdSet" id="ProjectItemContextGroup" priority="0x600">
+      <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_REFERENCEROOT"/>
+    </CommandPlacement>
+  </CommandPlacements>
+
+
+
+    <!-- This section is where you can associate a command with a keyboard shortcut; this association is
+      valid within a specific UI context, that is when the shell is inside a specific mode, e.g. during
+      debugging, editing a file or when the user is using a specific designer. -->
+  <VisibilityConstraints>
+
+    <VisibilityItem guid="guidCogaenEditExtensionCmdSet" id="ID_COGAEN_EDT_TLB" context="guidCogaenEditExtensionEditorFactory" />
+  </VisibilityConstraints>
+
+  <KeyBindings>
+     <!--Keybindings 
+       To define a binding, you have to specify the sequence of keys to press to activate the command  
+       (keystate); 
+       
+       Notice that Visual Studio has a lot of components and commands, so it can be difficult to find a  
+       key binding not used by somebody else; if the key bindings are conflicting only one will be used 
+       and one problem is that the shell will not inform the user that a conflict was found. The only  
+       way to detect the problem is to start Visual Studio under debugger, try to execute any command  
+       and look if there is a message in the output window about a duplicated accelerator found.--> 
+    <KeyBinding guid="guidVSStd97" id="cmdidBold" editor="guidCogaenEditExtensionEditorFactory" key1="B" mod1="Control"/>
+    <KeyBinding guid="guidVSStd97" id="cmdidItalic" editor="guidCogaenEditExtensionEditorFactory" key1="I" mod1="Control"/>
+    <KeyBinding guid="guidVSStd97" id="cmdidUnderline" editor="guidCogaenEditExtensionEditorFactory" key1="U" mod1="Control"/>
+    <KeyBinding guid="guidVSStd97" id="cmdidJustifyLeft" editor="guidCogaenEditExtensionEditorFactory" key1="L" mod1="Control"/>
+    <KeyBinding guid="guidVSStd97" id="cmdidJustifyCenter" editor="guidCogaenEditExtensionEditorFactory" key1="E" mod1="Control"/>
+    <KeyBinding guid="guidVSStd97" id="cmdidJustifyRight" editor="guidCogaenEditExtensionEditorFactory" key1="R" mod1="Control"/>
+    <KeyBinding guid="guidVSStd2K" id="ECMD_INSERT" editor="guidCogaenEditExtensionEditorFactory" key1="VK_INSERT"/>
+  </KeyBindings>
+
+  <Symbols>
+    <!-- This is the package guid. -->
+    <GuidSymbol name="guidCogaenEditExtensionPkg" value="{76991994-c77e-469c-94e4-7575746b341d}" />
+    
+    <!-- This is the guid used to group the menu commands together -->
+    <GuidSymbol name="guidCogaenEditExtensionCmdSet" value="{30017b07-a945-45b3-82f8-73d331235878}">
+
+      <IDSymbol name="ID_COGAEN_EDT_TLB" value="0x0001" />
+      <IDSymbol name="IDMX_RTF" value="0x0002" />
+      <!--<IDSymbol name="IDM_RTFMNU_ALIGN" value="0x0004" />
+      <IDSymbol name="IDM_RTFMNU_SIZE" value="0x0005" />
+      
+      <IDSymbol name="IDG_RTF_FMT_FONT1" value="0x1000" />
+      <IDSymbol name="IDG_RTF_FMT_FONT2" value="0x1001" />
+      <IDSymbol name="IDG_RTF_FMT_INDENT" value="0x1002" />
+      <IDSymbol name="IDG_RTF_FMT_BULLET" value="0x1003" />
+      
+      <IDSymbol name="IDG_RTF_TLB_FONT1" value="0x1004" />
+      <IDSymbol name="IDG_RTF_TLB_FONT2" value="0x1005" />
+      <IDSymbol name="IDG_RTF_TLB_INDENT" value="0x1006" />
+      <IDSymbol name="IDG_RTF_TLB_BULLET" value="0x1007" />
+      <IDSymbol name="IDG_RTF_TLB_FONT_COMBOS" value="0x1008" />-->
+      <IDSymbol name="IDG_RTF_CTX_EDIT" value="0x1009" />
+      <IDSymbol name="IDG_RTF_CTX_PROPS" value="0x100a" />
+      <IDSymbol name="IDG_RTF_EDITOR_CMDS" value="0x100b" />
+      <IDSymbol name="MyMenuGroup" value="0x1020" />
+      <IDSymbol name="cmdidConnect" value="0x0100" />
+      <IDSymbol name="cmdidDisconnect" value="0x0101" />
+      <IDSymbol name="cmdidCogaenEdit" value="0x0102" />
+      <IDSymbol name="cmdidAddContentRef" value="0x0103" />
+      <IDSymbol name="commandIDStrike" value="0x0104" />
+      <IDSymbol name="ID_COGAEN_EDT_TLB" value="0x0105" />
+      <IDSymbol name="IDG_COGAEN_EDT_CONNECT" value="0x0106" />
+      
+      <IDSymbol name="IDG_COGAEN_EDT_EDITOR" value="0x0107" />
+      <IDSymbol name="cmdidConvert2Macro" value="0x0108" />
+      <IDSymbol name="cmdidConvert2Script" value="0x0109" />
+      <IDSymbol name="cmdidRunScript" value="0x0110" />
+      <IDSymbol name="cmdidMessageWindow" value="0x0111" />
+      <IDSymbol name="cmdidLive2DWindow" value="0x0112" />
+      <IDSymbol name="cmdidLive3DWindow" value="0x0113" />
+      
+      <IDSymbol name="ProjectItemContextGroup" value="0x2001"/>
+    </GuidSymbol>
+    
+    <GuidSymbol name="guidCogaenEditExtensionEditorFactory" value="{4108399a-f4dd-432b-a611-19470f23901d}" />
+    
+    <GuidSymbol name="guidImages" value="{aa85840f-1de0-4bc6-905e-a1b812c73b37}" >
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+    </GuidSymbol>
+    <GuidSymbol name="guidImagesBasic" value="{7CFE932E-6EC4-4DC3-9A15-A7E00632A940}" >
+      <IDSymbol name="bmpConnect" value="1" />
+      <IDSymbol name="bmpDisconnect" value="2" />
+      <IDSymbol name="bmpLogo" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+    </GuidSymbol>
+  </Symbols>
+
+</CommandTable>

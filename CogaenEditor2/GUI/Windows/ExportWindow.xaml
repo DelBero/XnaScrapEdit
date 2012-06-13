@@ -1,0 +1,21 @@
+﻿<Window x:Class="CogaenEditor2.GUI.Windows.ExportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Script Export" Height="200" Width="300" WindowStyle="ToolWindow">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <TextBlock MinWidth="78" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center">Exporter:</TextBlock>
+            <ComboBox x:Name="m_exporterCombobox" ItemsSource="{Binding Source={x:Static Application.Current}, Path=Exporter}" MinWidth="200" HorizontalAlignment="Right" VerticalAlignment="Center" SelectionChanged="m_exporterCombobox_SelectionChanged"></ComboBox>
+        </StackPanel>
+        <StackPanel Grid.Row="1">
+            <TextBox x:Name="SaveFile"></TextBox>
+            <Button Content="File" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60" Click="Button_Click"></Button>
+        </StackPanel>
+        <Button Grid.Row="2" Content="Export" HorizontalAlignment="Center" VerticalAlignment="Center" Width="60" IsDefault="True" Click="Button_Click_1"></Button>
+    </Grid>
+</Window>

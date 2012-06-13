@@ -1,0 +1,433 @@
+﻿<ribbon:RibbonWindow x:Class="CogaenEditor2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ribbon="clr-namespace:Microsoft.Windows.Controls.Ribbon;assembly=RibbonControlsLibrary"
+        xmlns:menu="clr-namespace:CogaenEditor2.GUI.Menu"
+        xmlns:select="clr-namespace:CogaenEditorControls.Resources.TemplateSelectors;assembly=CogaenEditorControls"
+        xmlns:sel="clr-namespace:CogaenEditor2.Resources.TemplateSelectors"
+        Title="CogaenEditor"
+        x:Name="RibbonWindow"
+        Width="1024" Height="768" WindowState="Normal" xmlns:my="clr-namespace:System;assembly=mscorlib"
+        Closing="RibbonWindow_Closing"
+        Icon="/CogaenEditor2;component/icons/Logo.png">
+    <ribbon:RibbonWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles/RibbonStyles.xaml"/>
+                <ResourceDictionary Source="Resources/DataTemplates/RibbonTemplates.xaml"/>
+                <ResourceDictionary Source="Resources/DataTemplates/TemplateTemplates.xaml"/>
+                <ResourceDictionary Source="Resources/DataTemplates/ResourceTemplates.xaml"/>
+                <ResourceDictionary Source="Resources/DataTemplates/ProjectTemplates.xaml"/>
+                <ResourceDictionary>
+                    <sel:ObjectBuilderTemplateSelector x:Key="ObjectBuilderTemplateSelector"/>
+                    <select:ScriptObjectTemplateSelector x:Key="ScriptObjectTemplateSelector"/>
+                    <select:MacroTemplateSelector x:Key="MacroTemplateSelector"/>
+
+                    <CollectionViewSource 
+                        Source="{Binding Source={x:Static Application.Current}, Path=Templates.Templates}"
+                        x:Key="MacroView" />
+
+                    <CollectionViewSource
+                        Source="{Binding Source={x:Static Application.Current}, Path=Data.Macros}"
+                        x:Key="MacroLiveView" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+            <DataTemplate x:Key="RecentFileTemplate">
+                <ribbon:RibbonApplicationMenuItem Header="{Binding Path=Filename}" Command="Open" CommandParameter="{Binding}"></ribbon:RibbonApplicationMenuItem>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ribbon:RibbonWindow.Resources>
+
+    <ribbon:RibbonWindow.CommandBindings>
+        <CommandBinding Command="New"
+                        CanExecute="CommandBinding_CanExecuteNew"
+                        Executed="CommandBinding_ExecutedNew"></CommandBinding>
+        <CommandBinding Command="{x:Static menu:MenuManager.Connect}"
+                        CanExecute="CommandBinding_CanExecuteConnect"
+                        Executed="CommandBinding_ExecutedConnect"></CommandBinding>
+        <CommandBinding Command="{x:Static menu:MenuManager.Disconnect}"
+                        CanExecute="CommandBinding_CanExecuteDisconnect"
+                        Executed="CommandBinding_ExecutedDisconnect"></CommandBinding>
+        <CommandBinding Command="Copy"
+                        CanExecute="CommandBinding_CanExecute"
+                        Executed="CommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="Paste"
+                        Executed="CommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="Open"
+                        CanExecute="OpenTemplate_CanExecute"
+                        Executed="OpenTemplate_Executed"></CommandBinding>
+        <CommandBinding Command="Delete"
+                        CanExecute="CommandBinding_CanExecute"
+                        Executed="CommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="New"
+                        CanExecute="CommandBinding_CanExecute"
+                        Executed="CommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="Save"
+                        CanExecute="CommandBinding_CanExecute"
+                        Executed="CommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="Refresh"
+                        CanExecute="CommandBinding_CanExecute"
+                        Executed="CommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="{x:Static menu:MenuManager.SaveAll}"
+                        CanExecute="Save_CanExecute_Project"
+                        Executed="Save_Executed_Project"></CommandBinding>
+        <CommandBinding Command="{x:Static menu:MenuManager.Rename}"
+                        CanExecute="Rename_CanExecute"
+                        Executed="Rename_Executed"></CommandBinding>
+        <CommandBinding Command="Properties"
+                        CanExecute="Props_CanExecute_Project"
+                        Executed="Props_Executed_Project"></CommandBinding>
+        <!-- GameObjects -->
+        <CommandBinding Command="{x:Static menu:MenuManager.RemoveElementCommand}"
+                        CanExecute="RemoveParameter_CanExecute_ObjectBuilder"
+                        Executed="RemoveParameter_Executed_ObjectBuilder"></CommandBinding>
+        <CommandBinding Command="{x:Static menu:MenuManager.RenameGameObject}"
+                        CanExecute="Rename_CanExecute_GameObject"
+                        Executed="Rename_Executed_GameObject"></CommandBinding>
+        <!-- Templates -->
+        <CommandBinding Command="{x:Static menu:MenuManager.RunTemplate}"
+                        CanExecute="RunTemplate_CanExecute"
+                        Executed="RunTemplate_Executed"></CommandBinding>
+        <CommandBinding Command="{x:Static menu:MenuManager.ConvertLive2Script}"
+                        CanExecute="ConvertLive2Script_CanExecute"
+                        Executed="ConvertLive2Script_Executed"></CommandBinding>
+        <!-- Project -->
+        <CommandBinding Command="{x:Static menu:MenuManager.LoadProjectCommand}"
+                        CanExecute="Load_CanExecute_Project"
+                        Executed="Load_Executed_Project"></CommandBinding>
+        <CommandBinding Command="{x:Static menu:MenuManager.NewProjectCommand}"
+                        CanExecute="New_CanExecute_Project"
+                        Executed="New_Executed_Project"></CommandBinding>
+        <CommandBinding Command="{x:Static menu:MenuManager.CloseProjectCommand}"
+                        CanExecute="Close_CanExecute_Project"
+                        Executed="Close_Executed_Project"></CommandBinding>
+        <!-- Sorting -->
+        <CommandBinding Command="{x:Static menu:MenuManager.SortGameObjectsCommand}"
+                        CanExecute="Sort_CanExecute"
+                        Executed="Sort_Executed"
+                        />
+    </ribbon:RibbonWindow.CommandBindings>
+    <ribbon:RibbonWindow.InputBindings>
+        <KeyBinding Command="{x:Static menu:MenuManager.SaveAll}"
+                        Key="S"
+                        Modifiers="Control+Shift"></KeyBinding>
+    </ribbon:RibbonWindow.InputBindings>
+
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{Binding ElementName=Ribbon, Path=Height}"/>
+            <RowDefinition/>
+            <RowDefinition Height="25" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition MaxWidth="350"
+                              MinWidth="100"
+                              Width="250"/>
+        </Grid.ColumnDefinitions>
+        <ribbon:Ribbon x:Name="Ribbon" 
+                       Grid.Row="0"
+                       Grid.ColumnSpan="3"
+                       SelectionChanged="Ribbon_SelectionChanged"
+                       ItemsSource="{Binding Source={x:Static Application.Current}, Path=Menu.CommandGroups}"
+                       ItemContainerStyle="{StaticResource RibbonTabStyle}"
+                       >
+            <ribbon:Ribbon.ApplicationMenu>
+                <ribbon:RibbonApplicationMenu Name="Menu" SmallImageSource="Images\SmallIcon.png" Height="23">
+                    <ribbon:RibbonApplicationMenu.CommandBindings>
+                        <CommandBinding Command="Open"
+                                        CanExecute="OpenRecent_CanExecute"
+                                        Executed="OpenRecent_Executed"/>
+                    </ribbon:RibbonApplicationMenu.CommandBindings>
+                    <ribbon:RibbonApplicationMenuItem Header="New Project"
+                                                      ImageSource="/CogaenEditor2;component/icons/new_small.png"
+                                                      Command="{x:Static menu:MenuManager.NewProjectCommand}"
+                                                      />
+                    <ribbon:RibbonApplicationMenuItem Header="Open Project"
+                                                      ImageSource="/CogaenEditor2;component/icons/open_small.png"
+                                                      Command="{x:Static menu:MenuManager.LoadProjectCommand}"
+                                                      />
+                    <ribbon:RibbonApplicationSplitMenuItem Header="Recent" ItemsSource="{Binding Path=Recent.Recent}" ItemTemplate="{StaticResource RecentFileTemplate}">
+                    </ribbon:RibbonApplicationSplitMenuItem>
+                    <ribbon:RibbonApplicationMenuItem Header="Save Project"
+                                                      ImageSource="/CogaenEditor2;component/icons/SaveAll_small.png"
+                                                      Command="{x:Static menu:MenuManager.SaveAll}"
+                                                      />
+                    <ribbon:RibbonApplicationMenuItem Header="Close Project"
+                                                      ImageSource="Images\LargeIcon.png"
+                                                      Command="{x:Static menu:MenuManager.CloseProjectCommand}"
+                                                      />
+                    <ribbon:RibbonApplicationMenuItem Header="Config"
+                                                      ImageSource="Images\LargeIcon.png"
+                                                      Command="{x:Static menu:MenuManager.ShowConfig}"
+                                                      />
+                    <ribbon:RibbonApplicationMenuItem Header="Save Config"
+                                                      ImageSource="/CogaenEditor2;component/icons/save_small.png"
+                                                      Command="{x:Static menu:MenuManager.SaveConfig}"
+                                                      />
+                    <ribbon:RibbonApplicationMenuItem Header="Load Config" 
+                                                      ImageSource="/CogaenEditor2;component/icons/open_small.png"
+                                                      Command="{x:Static menu:MenuManager.LoadConfig}"
+                                                      />
+                    <ribbon:RibbonApplicationMenuItem Header="Reset Config" 
+                                                      ImageSource="/CogaenEditor2;component/icons/delete.png"
+                                                      Command="{x:Static menu:MenuManager.ResetConfig}"
+                                                      />
+                </ribbon:RibbonApplicationMenu>
+            </ribbon:Ribbon.ApplicationMenu>
+        </ribbon:Ribbon>
+        <DockPanel Grid.Row="1"
+                   Grid.Column="0">
+            <Expander DockPanel.Dock="Left"
+                      ExpandDirection="Right">
+                <Expander.Header>
+                    <TextBlock Text="{Binding Path=CurrentProject.Root.Name}">
+                        <TextBlock.RenderTransform>
+                            <TransformGroup>
+                                <RotateTransform Angle="90" CenterX="10" CenterY="10"/>
+                                <TranslateTransform X="13"/>
+                            </TransformGroup>
+                        </TextBlock.RenderTransform>
+                    </TextBlock>
+                </Expander.Header>
+                <TreeView ItemsSource="{Binding Path=CurrentProject.RootElements}"
+                          Width="250"
+                          AllowDrop="True"
+                          PreviewDragOver="Project_PreviewDragOver"
+                          MouseMove="Project_MouseMove"
+                          Drop="Project_Drop">
+                    <TreeView.CommandBindings>
+                        <CommandBinding Command="Open"
+                            CanExecute="Open_CanExecute_ProjectFile"
+                            Executed="Open_Executed_ProjectFile"></CommandBinding>
+                        <CommandBinding Command="New"
+                                        Executed="New_Executed_ProjectFile"/>
+                        <CommandBinding Command="{x:Static menu:MenuManager.Rename}"
+                                        Executed="Rename_Executed_ProjectFile"
+                                        CanExecute="Rename_CanExecute_ProjectFile"
+                                        />
+                        <CommandBinding Command="{x:Static menu:MenuManager.Export}"
+                                        Executed="Export_Executed_ProjectFile"
+                                        CanExecute="Export_CanExecute_ProjectFile"
+                                        />
+                        <CommandBinding Command="Properties"
+                                        CanExecute="Props_CanExecute_ProjectFile"
+                                        Executed="Props_Executed_Project"/>
+                        <CommandBinding Command="Delete"
+                                        CanExecute="Delete_CanExecute_ProjectFile"
+                                        Executed="Delete_Executed_ProjectFile"/>
+                    </TreeView.CommandBindings>
+                    <TreeView.InputBindings>
+                        <KeyBinding Command="{x:Static menu:MenuManager.Rename}"
+                                    Key="F2"></KeyBinding>
+                    </TreeView.InputBindings>
+                    <TreeView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="New" Header="Add Template"></MenuItem>
+                            <MenuItem Command="{Binding Source={x:Static Application.Current}, Path=Menu.NewProjectFilterCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=TreeView, AncestorLevel=1}, Path=SelectedItem}" Header="Add Filter"></MenuItem>
+                        </ContextMenu>
+                    </TreeView.ContextMenu>
+                </TreeView>
+            </Expander>
+            <TabControl Name="m_MainTab"
+                     SelectionChanged="m_MainTab_SelectionChanged">
+                <TabItem Header="Templates"
+                     Name="m_2dEditor">
+                    <TabControl Name="TemplateTab"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            ItemsSource="{Binding Path=Templates.Templates}"
+                            AllowDrop="True" 
+                            TabStripPlacement="Bottom" 
+                            DockPanel.Dock="Top"
+                            SelectionChanged="TabControl_SelectionChanged"
+                            SelectedIndex="{Binding Path=Templates.Selected}"
+                            >
+                        <TabControl.CommandBindings>
+                            <CommandBinding Command="Close" 
+                                            CanExecute="Close_CanExecute_Template"
+                                            Executed="Close_Executed_Template">
+                            </CommandBinding>
+                        </TabControl.CommandBindings>
+                        <TabControl.ItemContainerStyle>
+                            <Style TargetType="TabItem">
+                                <Setter Property="ContentTemplateSelector" Value="{StaticResource ObjectBuilderTemplateSelector}"/>
+                                <Setter Property="Header" Value="{Binding}"/>
+                            </Style>
+                        </TabControl.ItemContainerStyle>
+                    </TabControl>
+                </TabItem>
+                <TabItem Header="2D Live"
+                     Name="m_2dLiveEditor">
+                    <Canvas Name="GameObjectsGrid"
+                        MouseUp="LiveEditor2D_MouseUp"
+                        MouseDown="LiveEditor2D_MouseDown"
+                        MouseMove="LiveEditor2D_MouseMove"
+                        MouseWheel="LiveEditor2D_MouseWheel"
+                        ClipToBounds="True"
+                        DragEnter="LiveEditor2D_DragEnter"
+                        Drop="LiveEditor2D_Drop"
+                        Focusable="True">
+                        <Canvas.CommandBindings>
+                            <CommandBinding Command="{x:Static menu:MenuManager.SendMessageCommand}"
+                                            CanExecute="SendMessage_CanExecute"
+                                            Executed="SendMessage_Executed"/>
+                        </Canvas.CommandBindings>
+                        <Canvas.Background>
+                            <ImageBrush ImageSource="/CogaenEditor2;component/icons/bg.png" Stretch="Fill" TileMode="Tile" Viewport="0,0,10,10" ViewportUnits="Absolute">
+                                <ImageBrush.Transform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="{Binding Source={x:Static Application.Current}, Path=ObjectBuilder.Scaling}" ScaleY="{Binding Source={x:Static Application.Current}, Path=ObjectBuilder.Scaling}" />
+                                        <TranslateTransform X="{Binding Source={x:Static Application.Current}, Path=ObjectBuilder.Offset.X}" Y="{Binding Source={x:Static Application.Current}, Path=ObjectBuilder.Offset.Y}"/>
+                                    </TransformGroup>
+                                </ImageBrush.Transform>
+                            </ImageBrush>
+                        </Canvas.Background>
+                        <Canvas.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Reset Offset" 
+                                          Command="{x:Static menu:MenuManager.ResetOffsetCommand}" 
+                                          CommandParameter="{Binding}"/>
+                                <MenuItem Header="Reset Zoom" 
+                                          Command="{x:Static menu:MenuManager.ResetZoomCommand}" 
+                                          CommandParameter="{Binding}"/>
+                                <MenuItem Header="Sort">
+                                    <MenuItem Header="Square" 
+                                          Command="{x:Static menu:MenuManager.SortGameObjectsCommand}" 
+                                          CommandParameter="{Binding}"/>
+                                    <MenuItem Header="List" 
+                                          Command="{x:Static menu:MenuManager.SortGameObjectsTopDownCommand}" 
+                                          CommandParameter="{Binding}"/>
+                                </MenuItem>
+                                <Separator/>
+                                <MenuItem Header="Convert to Script" 
+                                          Command="{x:Static menu:MenuManager.ConvertLive2Script}" 
+                                          CommandParameter="{Binding}"/>
+                            </ContextMenu>
+                        </Canvas.ContextMenu>
+                        <!--GameObjects-->
+                        <ItemsControl ItemsSource="{Binding Source={x:Static Application.Current}, Path=Data.LiveGameObjects.ScriptObjects, Mode=TwoWay}" ItemTemplate="{StaticResource LiveGameObjectTemplate}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Canvas/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </Canvas>
+                </TabItem>
+            </TabControl>
+        </DockPanel>
+        <GridSplitter Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Width="5">
+        </GridSplitter>
+        <TabControl
+            Name="m_resourceTab"
+            Grid.Row="1" 
+            Grid.Column="3" SelectionChanged="TabControl_SelectionChanged_1"
+            MinWidth="100">
+            <!--<TabItem Header="Components">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0">Components:</TextBlock>
+                    <ListBox Grid.Row="1"
+                    Name="m_listBoxComponents"
+                    HorizontalContentAlignment="Stretch"
+                    ItemsSource="{Binding Source={x:Static Application.Current}, Path=ElementsList}"
+                    MouseDown="list_MouseDown" 
+                    MouseMove="list_MouseMove" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+                </Grid>
+            </TabItem>-->
+            <TabItem Header="Resources">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition MinHeight="10"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition MinHeight="10"/>
+                    </Grid.RowDefinitions>
+                    <TreeView x:Name="m_resourceTreeView"
+                              Grid.Row="0"
+                              MouseDown="list_MouseDown"
+                              MouseMove="list_MouseMove"
+                              DataContext="{Binding Source={x:Static Application.Current}, Path=Data.Resources}"
+                              ItemsSource="{Binding Path=Resources}"
+                              >
+                        <TreeView.CommandBindings>
+                            <CommandBinding Command="Open"
+                                            CanExecute="Open_CanExecute_CogaenResource"
+                                            Executed="Open_Executed_CogaenResource"
+                                            ></CommandBinding>
+                        </TreeView.CommandBindings>
+                        <!--ItemTemplate="{StaticResource PairFileWithContens}"-->
+                    </TreeView>
+                    <GridSplitter Grid.Row="1" Height="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" />
+                    <TreeView x:Name="m_localResourceTreeView"
+                              Grid.Row="2"
+                              MouseDown="list_MouseDown"
+                              MouseMove="list_MouseMove"
+                              >
+                        <TreeView.CommandBindings>
+                            <CommandBinding Command="Open"
+                                            CanExecute="Open_CanExecute_LocalResource"
+                                            Executed="Open_Executed_LocalResource"
+                                            ></CommandBinding>
+                        </TreeView.CommandBindings>
+                        <TreeViewItem   HeaderTemplate="{StaticResource ResourceKey=ResourceHeaderMeshTemplate}"
+                                        DataContext="{Binding Source={x:Static Application.Current}, Path=ResourceManager}"
+                                        ItemsSource="{Binding Path=Meshes}"
+                                        ItemTemplate="{StaticResource PairFileWithContens}"
+                                        >
+                            <TreeViewItem.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Open" Command="Open" CommandParameter="{Binding}"></MenuItem>
+                                </ContextMenu>
+                            </TreeViewItem.ContextMenu>
+                        </TreeViewItem>
+                        <TreeViewItem   HeaderTemplate="{StaticResource ResourceKey=ResourceHeaderTextureTemplate}"
+                                        DataContext="{Binding Source={x:Static Application.Current}, Path=ResourceManager.Textures}"
+                                        ItemsSource="{Binding}"
+                                        ItemTemplate="{StaticResource PairFileWithContens}"
+                                        />
+                        <TreeViewItem   Header="Materials"
+                                        DataContext="{Binding Source={x:Static Application.Current}, Path=ResourceManager.Materials}"
+                                        ItemsSource="{Binding}"
+                                        ItemTemplate="{StaticResource PairFileWithContens}"
+                                        />
+                    </TreeView>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Macros">
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+                        <Button VerticalAlignment="Bottom" HorizontalAlignment="Center" ToolTip="Place a 'Register Macro' call in the current script" Click="RegisterMacro_Click">Register Macro</Button>
+                    </StackPanel>
+                    <ListBox Name="m_MacroList"
+                        ItemsSource="{Binding Source={StaticResource MacroLiveView}}"
+                        ItemTemplateSelector="{StaticResource MacroTemplateSelector}"
+                        MouseMove="list_MouseMove" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    </ListBox>
+                </DockPanel>
+            </TabItem>
+        </TabControl>
+        <!--Statusbar-->
+        <StatusBar Grid.Row="2"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="3"
+                   x:Name="m_statusbar">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition MinWidth="50"/>
+                    <ColumnDefinition MinWidth="250"/>
+                    <ColumnDefinition MinWidth="50"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding Path=StatusText}"></TextBlock>
+                <ProgressBar Grid.Column="1"
+                             x:Name="m_statusProgressbar"
+                             Value="{Binding Path=StatusValue}"
+                             Maximum="{Binding Path=StatusMaxValue}"></ProgressBar>
+            </Grid>
+        </StatusBar>
+    </Grid>
+</ribbon:RibbonWindow>

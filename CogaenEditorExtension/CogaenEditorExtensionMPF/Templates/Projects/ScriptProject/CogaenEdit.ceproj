@@ -1,0 +1,29 @@
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <ProjectGuid>$guid1$</ProjectGuid>
+    <OutputType>Script</OutputType>
+    <Exporter>XnaScriptExporter</Exporter>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- Set the IronPythonPath property by proving in different locations where Iron Python could be installed -->
+    <!-- Regular LocalAppData -->
+    <CogaenEditPath Condition=" '$(CogaenEditPath)' == '' AND Exists('$(LocalAppData)\Microsoft\VisualStudio\10.0\Extensions\Bero Inc\CogaenEdit\1.0\CogaenEdit.targets')">$(LocalAppData)\Microsoft\VisualStudio\10.0\Extensions\Bero Inc\CogaenEdit\1.0</CogaenEditPath>
+    <!-- Experimental LocalAppData -->
+    <CogaenEditPath Condition=" '$(CogaenEditPath)' == '' AND Exists('$(LocalAppData)\Microsoft\VisualStudio\10.0Exp\Extensions\Bero Inc\CogaenEdit\1.0\CogaenEdit.targets')">$(LocalAppData)\Microsoft\VisualStudio\10.0Exp\Extensions\Bero Inc\CogaenEdit\1.0</CogaenEditPath>
+    <!-- Integrated Shell -->
+    <CogaenEditPath Condition=" '$(CogaenEditPath)' == '' AND Exists('$(MSBuildExtensionsPath)\Microsoft\IronPython Studio 2010\1.0\IronPython.targets')">$(MSBuildExtensionsPath)\Microsoft\IronPython Studio 2010\1.0</CogaenEditPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="NewScript.ctl"/>
+  </ItemGroup>
+  <Import Project="$(CogaenEditPath)\CogaenEdit.targets" />
+</Project>

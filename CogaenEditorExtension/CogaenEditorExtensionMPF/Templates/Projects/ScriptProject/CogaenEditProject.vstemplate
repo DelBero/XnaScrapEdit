@@ -1,0 +1,19 @@
+<VSTemplate Version="2.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>Cogaen Project</Name>
+    <Description>A project for creating a default script package</Description>
+    <Icon>__TemplateIcon.ico</Icon>
+    <ProjectType>CogaenEdit</ProjectType>
+    <SortOrder>50</SortOrder>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>CogaenProject</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="CogaenEdit.ceproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" OpenInEditor="false">NewScript.ctl</ProjectItem>
+    </Project>
+  </TemplateContent>
+</VSTemplate>

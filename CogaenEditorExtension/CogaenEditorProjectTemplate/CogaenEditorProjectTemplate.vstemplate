@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>CogaenEditorProjectTemplate</Name>
+    <Description>&lt;No description available&gt;</Description>
+    <Icon>CogaenEditorProjectTemplate.ico</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
+    <SortOrder>1000</SortOrder>
+    <TemplateID>1da7e69d-14da-4b87-b757-7e8785b6925c</TemplateID>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>CogaenEditorProjectTemplate</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="ProjectTemplate.cep" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true">NewScript.ctl</ProjectItem>
+    </Project>
+  </TemplateContent>
+</VSTemplate>

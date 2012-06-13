@@ -1,0 +1,60 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:cec="clr-namespace:CogaenEditorControls"
+                    xmlns:converter="clr-namespace:CogaenEditorControls.Converter"
+                    x:Class="CogaenEditorControls.GUI_Elements.Templates.MessageTemplates">
+    <converter:StringBoolConverter x:Key="String2BoolConverter"/>
+    <!-- Message Templates -->
+    <!-- FloatParameter -->
+    <HierarchicalDataTemplate x:Key="MessageFloatParameterTemplate" ItemsSource="{Binding Path=Params}">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding Path=Name}" MinWidth="120" MaxWidth="120">
+                <TextBlock.ToolTip><TextBlock Text="{Binding Path=Name}"></TextBlock></TextBlock.ToolTip>
+            </TextBlock>
+            <cec:FloatParameterBox IsEnabled="{Binding Path=Editable}"
+                                   Value="{Binding Path=Values}"
+                                   MinWidth="120"
+                                   MaxWidth="120"
+                                   ></cec:FloatParameterBox>
+        </StackPanel>
+    </HierarchicalDataTemplate>
+    <!-- BoolParameter -->
+    <HierarchicalDataTemplate x:Key="MessageBoolParameterTemplate" ItemsSource="{Binding Path=Params}">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding Path=Name}" MinWidth="120" MaxWidth="120">
+                <TextBlock.ToolTip><TextBlock Text="{Binding Path=Name}"></TextBlock></TextBlock.ToolTip>
+            </TextBlock>
+            <CheckBox IsEnabled="{Binding Path=Editable}"
+                                   IsChecked="{Binding Path=Values, Converter={StaticResource String2BoolConverter}}"/>
+        </StackPanel>
+    </HierarchicalDataTemplate>
+    <!-- StringParameter -->
+    <HierarchicalDataTemplate x:Key="MessageStringParameterTemplate" ItemsSource="{Binding Path=Params}">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding Path=Name}" MinWidth="120" MaxWidth="120">
+                <TextBlock.ToolTip><TextBlock Text="{Binding Path=Name}"></TextBlock></TextBlock.ToolTip>
+            </TextBlock>
+            <cec:StringParameterBox IsEnabled="{Binding Path=Editable}"
+                                   Value="{Binding Path=Values}"
+                                   MinWidth="120"
+                                   MaxWidth="120"></cec:StringParameterBox>
+        </StackPanel>
+    </HierarchicalDataTemplate>
+    <!-- ComboboxParameter -->
+    <HierarchicalDataTemplate x:Key="MessageComboBoxParameterTemplate" ItemsSource="{Binding Path=Params}">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding Path=Name}" MinWidth="120" MaxWidth="120">
+                <TextBlock.ToolTip><TextBlock Text="{Binding Path=Name}"></TextBlock></TextBlock.ToolTip>
+            </TextBlock>
+            <!--<TextBox IsEnabled="{Binding Path=Editable}" Text="{Binding Path=Values}" MinWidth="120" MaxWidth="120"></TextBox>-->
+            <cec:ComboParameterBox IsEnabled="{Binding Path=Editable}"
+                                   Value="{Binding Path=Values}"
+                                   Values="{Binding Path=SemanticValues}"
+                                   MinWidth="120"
+                                   MaxWidth="120"
+                                   
+                                   ></cec:ComboParameterBox>
+        </StackPanel>
+    </HierarchicalDataTemplate>
+    <!-- Message -->
+</ResourceDictionary>

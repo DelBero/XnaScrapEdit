@@ -1,0 +1,55 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:manager="clr-namespace:CogaenEditor2.Manager"
+                    xmlns:menu="clr-namespace:CogaenEditor2.GUI.Menu"
+                    x:Class="CogaenEditor2.Resources.DataTemplates.ProjectTemplates">
+    <!-- Project -->
+    <!-- Filter -->
+    <HierarchicalDataTemplate DataType="{x:Type manager:ProjectFilter}" ItemsSource="{Binding Path= Entries}">
+        <StackPanel Orientation="Horizontal">
+            <StackPanel.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Add">
+                        <MenuItem Header="Template" Command="New" CommandParameter="{Binding}"></MenuItem>
+                        <MenuItem Header="Filter" Command="{x:Static menu:MenuManager.NewProjectFilterCommand}" CommandParameter="{Binding}"></MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="Rename" Command="{x:Static menu:MenuManager.Rename}" CommandParameter="{Binding}"></MenuItem>
+                    <MenuItem Header="Export" Command="{x:Static menu:MenuManager.Export}" CommandParameter="{Binding}"></MenuItem>
+                    <Separator/>
+                    <MenuItem Command="{x:Static menu:MenuManager.DeleteProjectFilterCommand}" CommandParameter="{Binding}" Header="Delete"></MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Properties" Command="Properties" CommandParameter="{Binding}"></MenuItem>
+                </ContextMenu>
+            </StackPanel.ContextMenu>
+            <Image Source="/CogaenEditor2;component/icons/folder_small.png"></Image>
+            <TextBlock Margin="0,0,10,0" HorizontalAlignment="Stretch" Text="{Binding Path=Name}" 
+                             LostFocus="ProjectElement_TextBox_LostFocus"
+                             KeyDown="ProjectElement_TextBox_KeyDown">
+                        <!--IsEnabled="{Binding Path=Editable, Mode=TwoWay}"-->
+            </TextBlock>
+        </StackPanel>
+    </HierarchicalDataTemplate>
+    <!-- File -->
+    <DataTemplate DataType="{x:Type manager:ProjectTemplateFile}">
+        <StackPanel Orientation="Horizontal">
+            <StackPanel.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Open" Command="Open" CommandParameter="{Binding}"></MenuItem>
+                    <MenuItem Header="Rename" Command="{x:Static menu:MenuManager.Rename}" CommandParameter="{Binding}"></MenuItem>
+                    <MenuItem Header="Export" Command="{x:Static menu:MenuManager.Export}" CommandParameter="{Binding}"></MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Remove" Command="Delete" CommandParameter="{Binding}"></MenuItem>
+                </ContextMenu>
+            </StackPanel.ContextMenu>
+            <TextBlock Margin="0,0,10,0" HorizontalAlignment="Stretch" Text="{Binding Path=Name}"
+                             
+                             MouseLeftButtonDown="Project_MouseLeftButtonDown"
+                             LostFocus="ProjectElement_TextBox_LostFocus"
+                             KeyDown="ProjectElement_TextBox_KeyDown"
+                               >
+                    <!--IsEnabled="{Binding Path=Editable, Mode=TwoWay}"-->
+            </TextBlock>
+        </StackPanel>
+    </DataTemplate>
+    <!-- end Project -->
+</ResourceDictionary>

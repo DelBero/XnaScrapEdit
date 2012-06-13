@@ -1,0 +1,202 @@
+﻿<UserControl x:Class="CogaenEditorControls.GUI_Elements.StateMachineControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:Converter="clr-namespace:CogaenEditorControls.Converter"
+             xmlns:local="clr-namespace:CogaenEditorControls.GUI_Elements"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignData ../SampleData/SampleStateMachine.xaml}"
+             Focusable="True">
+    <!---->
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Converter:ReferenceToVisibilityConverter x:Key="RefToVisConverter"/>
+            
+    <!-- Styles -->
+    <!-- State -->
+    <Style x:Key="StateSelected" TargetType="GroupBox">
+        <Setter Property="BorderBrush" Value="Green"></Setter>
+        <Setter Property="BorderThickness" Value="2"></Setter>
+    </Style>
+    <Style x:Key="StateUnselected" TargetType="GroupBox">
+        <Setter Property="BorderBrush" Value="Blue"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+    </Style>
+    <!-- Transitions -->
+    <Style x:Key="TransitionUnselected" TargetType="Line">
+        <Setter Property="Stroke" Value="Black"></Setter>
+        <Setter Property="StrokeThickness" Value="1"></Setter>
+    </Style>
+    <Style x:Key="TransitionSelected" TargetType="Line">
+        <Setter Property="Stroke" Value="Green"></Setter>
+        <Setter Property="StrokeThickness" Value="2"></Setter>
+    </Style>
+    <!-- End Styles -->
+
+    <!--Transitions-->
+    <!--This show lines between to states-->
+    <DataTemplate x:Key="Transition2D">
+        <Line Name="TransitionLine" X1="{Binding Path=From.Position.X}" Y1="{Binding Path=From.Position.Y}"
+              X2="{Binding Path=To.Position.X}" Y2="{Binding Path=To.Position.Y}">
+            <Line.RenderTransform>
+                <TranslateTransform X="15" Y="5"/>
+            </Line.RenderTransform>
+        </Line>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=Selected}">
+                <DataTrigger.Value>
+                    false
+                </DataTrigger.Value>
+                <DataTrigger.Setters>
+                    <Setter TargetName="TransitionLine" Property="Style" Value="{StaticResource TransitionUnselected}"></Setter>
+                </DataTrigger.Setters>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Selected}">
+                <DataTrigger.Value>
+                    true
+                </DataTrigger.Value>
+                <DataTrigger.Setters>
+                    <Setter TargetName="TransitionLine" Property="Style" Value="{StaticResource TransitionSelected}"></Setter>
+                </DataTrigger.Setters>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate x:Key="TransitionDetail">
+        <TextBlock Grid.Column="0" Text="{Binding Path=To.Name}">
+                    <TextBlock.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Name="Delete" Header="Delete" Command="Delete" CommandParameter="{Binding}"/>
+                        </ContextMenu>
+                    </TextBlock.ContextMenu>
+        </TextBlock>
+    </DataTemplate>
+    <!--Transitions end-->
+
+    <!--States-->
+    <DataTemplate x:Key="State2D">
+        <TextBlock Text="{Binding Path=Name}"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="StateDetail">
+        <GroupBox Name="Groupbox" MinWidth="100" Background="White" MouseLeftButtonDown="GroupBox_MouseLeftButtonDown" MouseLeftButtonUp="GroupBox_MouseLeftButtonUp">
+            <GroupBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Name="Delete" Header="Delete" Command="Delete" CommandParameter="{Binding}"/>
+                    <!--<MenuItem Name="Rename" Header="Rename" Command="{x:Static local:StateMachineControl.Rename}" CommandParameter="{Binding}"></MenuItem>-->
+                </ContextMenu>
+            </GroupBox.ContextMenu>
+            <GroupBox.Header>
+                <StackPanel Orientation="Vertical">
+                    <Rectangle HorizontalAlignment="Left"
+                                        MouseLeftButtonDown="StateMouseDown" 
+                                       MouseLeftButtonUp="StateMouseUp"
+                                ClipToBounds="False" Grid.Column="2" Height="14" VerticalAlignment="Center" Width="14" Fill="Cyan">
+                    </Rectangle>
+                    <!--<TextBox KeyDown="TextBox_KeyDown" Text="{Binding Path=Name}" IsEnabled="False"/>-->
+                    <TextBlock Text="{Binding Path=Name}"/>
+                </StackPanel>
+
+            </GroupBox.Header>
+            <GroupBox.RenderTransform>
+                <TransformGroup>
+                    <TranslateTransform X="{Binding Path=Position.X}" Y="{Binding Path=Position.Y}"/>
+                    <!--<ScaleTransform ScaleX="{Binding Source={x:Static Application.Current}, Path=ObjectBuilder.Scaling}" ScaleY="{Binding Source={x:Static Application.Current}, Path=ObjectBuilder.Scaling}" />-->
+                    <!--<TranslateTransform X="{Binding Source={x:Static Application.Current}, Path=ObjectBuilder.Offset.X}" Y="{Binding Source={x:Static Application.Current}, Path=ObjectBuilder.Offset.Y}"/>-->
+                </TransformGroup>
+            </GroupBox.RenderTransform>
+            <ListView
+                SelectionMode="Single"
+                Name="m_transitionList"
+                GotFocus="m_transitionList_GotFocus"
+                LostFocus="m_transitionList_LostFocus"
+                SelectionChanged="m_transitionList_SelectionChanged"
+                SelectedItem="{Binding Path=SelectedTransitions, Mode=TwoWay}"
+                ItemsSource="{Binding Path=Transitions}"
+                ItemTemplate="{StaticResource ResourceKey=TransitionDetail}">
+            </ListView>
+        </GroupBox>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=Selected}">
+                <DataTrigger.Value>
+                    false
+                </DataTrigger.Value>
+                <DataTrigger.Setters>
+                    <Setter TargetName="Groupbox" Property="Style" Value="{StaticResource StateUnselected}"></Setter>
+                </DataTrigger.Setters>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Selected}">
+                <DataTrigger.Value>
+                    true
+                </DataTrigger.Value>
+                <DataTrigger.Setters>
+                    <Setter TargetName="Groupbox" Property="Style" Value="{StaticResource StateSelected}"></Setter>
+                </DataTrigger.Setters>
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+    <!--States end-->
+
+    <!--State Machine-->
+    <DataTemplate x:Key="StateMachine2D">
+        <TextBlock>Test</TextBlock>
+    </DataTemplate>
+    <!-- Is handle in StateMachineWindow -->
+    <DataTemplate x:Key="StateMachineDetail">
+        <Canvas>
+            <ItemsControl>
+
+            </ItemsControl>
+        </Canvas>
+    </DataTemplate>
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <!--Stache Machine end-->
+
+
+    </ResourceDictionary>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="New" CanExecute="New_CanExecute" Executed="New_Executed"/>
+        <CommandBinding Command="Delete" CanExecute="Delete_CanExecute" Executed="Delete_Executed"/>
+        <CommandBinding Command="{x:Static local:StateMachineControl.Rename}" CanExecute="Rename_CanExecute" Executed="Rename_Executed"/>
+    </UserControl.CommandBindings>
+        <Canvas Grid.Row="1" Name="m_canvas" 
+                MouseMove="Canvas_MouseMove"
+                MouseDown="Canvas_MouseButtonDown"
+                MouseLeftButtonUp="Canvas_MouseLeftButtonUp"
+                Background="#00000000">
+
+        <Canvas.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="New State" Command="New"/>
+            </ContextMenu>
+        </Canvas.ContextMenu>
+            <!-- States -->
+            <ItemsControl ItemsSource="{Binding Path=States}"
+                      ItemTemplate="{StaticResource ResourceKey=StateDetail}"
+                          Panel.ZIndex="1">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+            <!-- Transitions -->
+            <ItemsControl ItemsSource="{Binding Transitions}"
+                      ItemTemplate="{StaticResource ResourceKey=Transition2D}"
+                          Panel.ZIndex="0">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+            <!-- TransitionLine -->
+            <Line x:Name="m_transitionLine"
+                Stroke="Blue"
+                X1="{Binding Path=Start.X}" X2="{Binding Path=End.X}" Y1="{Binding Path=Start.Y}" Y2="{Binding Path=End.Y}">
+            </Line>
+        </Canvas>
+</UserControl>

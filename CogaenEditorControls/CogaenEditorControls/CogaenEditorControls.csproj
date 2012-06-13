@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{098706D6-A507-4847-B438-9DA26DA9E398}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CogaenEditorControls</RootNamespace>
+    <AssemblyName>CogaenEditorControls</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\ColorChooser.xaml.cs">
+      <DependentUpon>ColorChooser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ColorDefiner.xaml.cs">
+      <DependentUpon>ColorDefiner.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FloatTextBox.xaml.cs">
+      <DependentUpon>FloatTextBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\IntegerTextBox.xaml.cs">
+      <DependentUpon>IntegerTextBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converter\BoolFlipConverter.cs" />
+    <Compile Include="Converter\ColorBrushConverter.cs" />
+    <Compile Include="Converter\ParameterConverter.cs" />
+    <Compile Include="Converter\StringBoolConverter.cs" />
+    <Compile Include="Converter\StringColorConverter.cs" />
+    <Compile Include="DummyInit.cs" />
+    <Compile Include="GUI Elements\GameObjectMessageControl.xaml.cs">
+      <DependentUpon>GameObjectMessageControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI Elements\ObjectBuilderLiveControl.xaml.cs">
+      <DependentUpon>ObjectBuilderLiveControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI Elements\SendMessagePanel.xaml.cs">
+      <DependentUpon>SendMessagePanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI Elements\StringQuery.xaml.cs">
+      <DependentUpon>StringQuery.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI Elements\Templates\MessageTemplates.cs" />
+    <Compile Include="Helper\StringQueryItem.cs" />
+    <Compile Include="Resources\TemplateSelectors\MacroTemplateSelector.cs" />
+    <Compile Include="Resources\TemplateSelectors\MessageParameterTemplateSelector.cs" />
+    <Compile Include="Resources\TemplateSelectors\ScriptObjectTemplateSelector.cs" />
+    <Compile Include="windows\ParameterWindow.xaml.cs">
+      <DependentUpon>ParameterWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Controls\ColorChooser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ColorDefiner.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ComboParameterBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\FloatParameterBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="Controls\ComboParameterBox.xaml.cs">
+      <DependentUpon>ComboParameterBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FloatParameterBox.xaml.cs">
+      <DependentUpon>FloatParameterBox.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Controls\FloatTextBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\IntegerTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StringParameterBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\NavigationMeshControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI Elements\GameObjectMessageControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI Elements\ObjectBuilderLiveControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GUI Elements\SendMessagePanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GUI Elements\StateMachineControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI Elements\ObjectBuilderControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Resource Include="SampleData\SampleColor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Page Include="windows\ParameterWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GUI Elements\Templates\MessageTemplates.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GUI Elements\StringQuery.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GUI Elements\Templates\ObjectBuilderTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Resource Include="SampleData\SampleMessage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Resource Include="Resources\Styles\TemplatesStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Resource Include="SampleData\SampleStateMachine.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\StringParameterBox.xaml.cs">
+      <DependentUpon>StringParameterBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NavigationMeshControl.xaml.cs">
+      <DependentUpon>NavigationMeshControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converter\ReferenceToVisibilityConverter.cs" />
+    <Compile Include="GUI Elements\SelectionBox.cs" />
+    <Compile Include="GUI Elements\StateMachineControl.xaml.cs">
+      <DependentUpon>StateMachineControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI Elements\ObjectBuilderControl.xaml.cs">
+      <DependentUpon>ObjectBuilderControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI Elements\Templates\ObjectBuilderTemplates.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Key.snk" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CogaenDataItems\CogaenDataItems.csproj">
+      <Project>{C9BE3126-D83B-4BBD-B17B-20E0A4F087EE}</Project>
+      <Name>CogaenDataItems</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\bg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\bg_macro.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

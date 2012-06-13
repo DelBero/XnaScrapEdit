@@ -1,0 +1,113 @@
+﻿<UserControl x:Class="CogaenEditorControls.GUI_Elements.ObjectBuilderLiveControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:select="clr-namespace:CogaenEditorControls.Resources.TemplateSelectors"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" xmlns:my="clr-namespace:CogaenEditorControls.GUI_Elements">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Templates/ObjectBuilderTemplates.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="../Resources/Styles/TemplatesStyles.xaml"></ResourceDictionary>
+                <ResourceDictionary>
+                    <select:ScriptObjectTemplateSelector x:Key="ScriptObjectLiveTemplateSelector"/>
+                    <select:MacroTemplateSelector x:Key="MacroTemplateSelector"/>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="Delete"
+                        CanExecute="Delete_CanExecute_GameObject"
+                        Executed="Delete_Executed_GameObject"></CommandBinding>
+        <CommandBinding Command="Copy"
+                                CanExecute="Copy_CanExecute_GameObject"
+                                Executed="Copy_Executed_GameObject"></CommandBinding>
+        <CommandBinding Command="Refresh"
+                                CanExecute="Refresh_CanExecute"
+                                Executed="Refresh_Executed"></CommandBinding>
+        <CommandBinding Command="Properties"
+                                CanExecute="Props_CanExecute"
+                                Executed="Props_Executed"></CommandBinding>
+    </UserControl.CommandBindings>
+    <UserControl.InputBindings>
+        <KeyBinding Command="Delete"
+                            Key="Delete"/>
+        <KeyBinding Command="Copy"
+                            Key="C"
+                            Modifiers="Control"/>
+        <KeyBinding Command="Refresh"
+                            Key="F5"/>
+    </UserControl.InputBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{Binding ElementName=OptionsExpander, Path=Height}"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Expander Name="OptionsExpander" Header="Options" Grid.Row="0" IsEnabled="False" ExpandDirection="Down" IsExpanded="False">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox IsEnabled="False" Content="Auto Update" IsChecked="{Binding Path=AutoUpdate, RelativeSource={RelativeSource FindAncestor, AncestorType=my:ObjectBuilderLiveControl, AncestorLevel=1}}"></CheckBox>
+                
+            </StackPanel>
+        </Expander>
+        <Canvas Name="GameObjectsGrid"
+                Grid.Row="1"
+                AllowDrop="True"
+                MouseUp="GameObjectsGrid_MouseUp" 
+                MouseDown="GameObjectsGrid_MouseDown" 
+                MouseMove="GameObjectsGrid_MouseMove"
+                MouseWheel="GameObjectsGrid_MouseWheel" 
+                ClipToBounds="True"
+                Focusable="True"
+                Style="{StaticResource ResourceKey=ObjectBuilderLiveBackground}">
+            <Canvas.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Reset Offset" 
+                                            Click="ResetOffset" 
+                                            CommandParameter="{Binding}"/>
+                    <MenuItem Header="Reset Zoom" 
+                                            Click="ResetZoom" 
+                                            CommandParameter="{Binding}"/>
+                    <MenuItem Header="Sort">
+                        <MenuItem Header="Square" 
+                                        Click="SortSquare" 
+                                        CommandParameter="{Binding}"/>
+                        <MenuItem Header="List" 
+                                        Click="SortList" 
+                                        CommandParameter="{Binding}"/>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Close"
+                                      Command="Close"
+                                      CommandParameter="{Binding}"></MenuItem>
+                </ContextMenu>
+            </Canvas.ContextMenu>
+            <!--ContextMenu-->
+            <Canvas.CommandBindings>
+                
+            </Canvas.CommandBindings>
+            <Canvas.InputBindings>
+                
+            </Canvas.InputBindings>
+            <!--GameObjects-->
+            <ItemsControl ItemsSource="{Binding Path=ScriptObjects}"
+                                    ItemTemplateSelector="{StaticResource ScriptObjectLiveTemplateSelector}"
+                                    >
+                <ItemsControl.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="{Binding  Path=Scaling}" ScaleY="{Binding Path=Scaling}" />
+                        <TranslateTransform X="{Binding  Path=Offset.X}" Y="{Binding Path=Offset.Y}"/>
+                    </TransformGroup>
+                </ItemsControl.RenderTransform>
+                <!--  ItemTemplate="{StaticResource GameObjectTemplate}"  -->
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </Canvas>
+    </Grid>
+</UserControl>

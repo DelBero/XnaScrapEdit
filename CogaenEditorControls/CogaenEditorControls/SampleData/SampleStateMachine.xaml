@@ -1,0 +1,51 @@
+﻿
+<local:StateMachine
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:CogaenDataItems.DataItems;assembly=CogaenDataItems"
+    Name="StateMachine1"
+    >
+
+    <local:StateMachine.States>
+        <local:State Name="State1WithLongName">
+            <local:State.Position>
+                <Point X="50" Y="25"/>
+            </local:State.Position>
+            <local:State.Transitions>
+                <local:Transition>
+                    <local:Transition.To>
+                        <local:State Name="State2">
+                            <local:State.Position>
+                                <Point X="150" Y="75"/>
+                            </local:State.Position>
+                        </local:State>
+                    </local:Transition.To>
+                </local:Transition>
+            </local:State.Transitions>
+        </local:State>
+        <local:State Name="State2">
+            <local:State.Position>
+                <Point X="150" Y="75"/>
+            </local:State.Position>
+        </local:State>
+    </local:StateMachine.States>
+    <local:StateMachine.Transitions>
+        <local:Transition>
+            <local:Transition.From>
+                <local:State Name="State1">
+                    <local:State.Position>
+                        <Point X="50" Y="25"/>
+                    </local:State.Position>
+                </local:State>
+            </local:Transition.From>
+            <local:Transition.To>
+                <local:State Name="State2">
+                    <local:State.Position>
+                        <Point X="150" Y="75"/>
+                    </local:State.Position>
+                </local:State>
+            </local:Transition.To>
+        </local:Transition>
+    </local:StateMachine.Transitions>
+    
+</local:StateMachine>

@@ -1,0 +1,29 @@
+﻿
+<local:MessageList
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:CogaenDataItems.DataItems;assembly=CogaenDataItems"
+    Name="Test">
+    <local:MessageList.Messages>
+        <local:GameMessage Name="TestMessageId">
+            <local:GameMessage.Parameter>
+                <local:Parameter Editable="False">
+                    <local:Parameter.Params>
+                        <local:Parameter Name="msgId" Values="ChangePositionId"></local:Parameter>
+                        <local:Parameter Name="position" Values="0,0,0" Editable="True"></local:Parameter>
+                    </local:Parameter.Params>
+                </local:Parameter>
+            </local:GameMessage.Parameter>
+        </local:GameMessage>
+        <local:GameMessage Name="TestMessage2Id">
+            <local:GameMessage.Parameter>
+                <local:Parameter Editable="False">
+                    <local:Parameter.Params>
+                        <local:Parameter Name="msgId" Values="ChangeScaleId"></local:Parameter>
+                        <local:Parameter Name="scale" Values="0,0,0" Editable="True"></local:Parameter>
+                    </local:Parameter.Params>
+                </local:Parameter>
+            </local:GameMessage.Parameter>
+        </local:GameMessage>
+    </local:MessageList.Messages>
+</local:MessageList>

@@ -1,0 +1,5 @@
+<Project Name="NewProject" ExportPath="." Path="." ExportFilter="False" ConfigFile="" ScriptType=".xmlScript">
+  <Files>
+    <File Filename="NewScript.ctl" Script="NewScript" />
+  </Files>
+</Project>

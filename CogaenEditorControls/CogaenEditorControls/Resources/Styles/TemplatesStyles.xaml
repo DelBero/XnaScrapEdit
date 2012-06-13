@@ -1,0 +1,80 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="TextEnabled" TargetType="{x:Type TextBox}">
+        <Setter Property="FontStyle" Value="Normal"></Setter>
+        <!--<Setter Property="Foreground" Value="Black"></Setter>-->
+    </Style>
+    <Style x:Key="TextDisabled" TargetType="{x:Type TextBox}">
+        <Setter Property="FontStyle" Value="Italic"></Setter>
+        <!--<Setter Property="Foreground" Value="Grey"></Setter>-->
+    </Style>
+    
+    <Style x:Key="GameObjectFrame" TargetType="{x:Type Border}">
+        <Setter Property="BorderThickness" Value="3"/>
+        <Setter Property="BorderBrush" Value="Blue"/>
+    </Style>
+    <Style x:Key="GameObjectFrameSelected" TargetType="{x:Type Border}">
+        <Setter Property="BorderThickness" Value="3"/>
+        <Setter Property="BorderBrush" Value="Green"/>
+    </Style>
+
+    <Style x:Key="Line" TargetType="{x:Type Line}">
+        <Setter Property="Stroke" Value="Blue"/>
+    </Style>
+
+    <Style x:Key="LineSelected" TargetType="{x:Type Line}">
+        <Setter Property="Stroke" Value="Green"/>
+    </Style>
+    
+    <Style x:Key="ObjectBuilderBackground" TargetType="{x:Type Canvas}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Path=IsMacro}" Value="false">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <ImageBrush ImageSource="/CogaenEditorControls;component/icons/bg.png" Stretch="Fill" TileMode="Tile" Viewport="0,0,10,10" ViewportUnits="Absolute">
+                            <ImageBrush.Transform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="{Binding  Path=Scaling}" ScaleY="{Binding Path=Scaling}" />
+                                    <TranslateTransform X="{Binding  Path=Offset.X}" Y="{Binding Path=Offset.Y}"/>
+                                </TransformGroup>
+                            </ImageBrush.Transform>
+                        </ImageBrush>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=IsMacro}" Value="true">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <ImageBrush ImageSource="/CogaenEditorControls;component/icons/bg_macro.png" Stretch="Fill" TileMode="Tile" Viewport="0,0,10,10" ViewportUnits="Absolute">
+                            <ImageBrush.Transform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="{Binding  Path=Scaling}" ScaleY="{Binding Path=Scaling}" />
+                                    <TranslateTransform X="{Binding  Path=Offset.X}" Y="{Binding Path=Offset.Y}"/>
+                                </TransformGroup>
+                            </ImageBrush.Transform>
+                        </ImageBrush>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ObjectBuilderLiveBackground" TargetType="{x:Type Canvas}">
+        <Setter Property="Background">
+            <Setter.Value>
+                <ImageBrush ImageSource="/CogaenEditorControls;component/icons/bg.png" Stretch="Fill" TileMode="Tile" Viewport="0,0,10,10" ViewportUnits="Absolute">
+                    <ImageBrush.Transform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="{Binding  Path=Scaling}" ScaleY="{Binding Path=Scaling}" />
+                            <TranslateTransform X="{Binding  Path=Offset.X}" Y="{Binding Path=Offset.Y}"/>
+                        </TransformGroup>
+                    </ImageBrush.Transform>
+                </ImageBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+</ResourceDictionary>

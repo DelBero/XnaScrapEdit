@@ -1,0 +1,12 @@
+﻿<Window x:Class="CogaenEditor.ListWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ListWindow" Height="600" Width="200" ShowInTaskbar="False" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner" Closing="Window_Closing" Topmost="True">
+
+    
+    
+    <DockPanel>        
+        <Button Content="Update" Height="23" HorizontalAlignment="Left" Name="button1" VerticalAlignment="Top" Width="75" DockPanel.Dock="Bottom" Click="button1_Click" />
+        <ListBox Name="listView1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding}"  HorizontalContentAlignment="Stretch" MouseDown="listView1_MouseDown" MouseMove="listView1_MouseMove"/>
+    </DockPanel>
+</Window>

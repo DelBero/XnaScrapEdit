@@ -1,0 +1,11 @@
+﻿
+<media:Color
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:media2="clr-namespace:System.Windows.Media;assembly=PresentationCore"
+    A="255"
+    R="128"
+    G="0"
+    B="128"
+    >
+</media:Color>

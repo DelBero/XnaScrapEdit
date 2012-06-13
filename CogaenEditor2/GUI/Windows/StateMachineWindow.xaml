@@ -1,0 +1,38 @@
+﻿<Window x:Class="CogaenEditor2.GUI.Windows.StateMachineWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:gui="clr-namespace:CogaenEditorControls.GUI_Elements;assembly=CogaenEditorControls"
+        xmlns:dataitems ="clr-namespace:CogaenDataItems.DataItems;assembly=CogaenDataItems"
+        xmlns:Converter="clr-namespace:CogaenEditor2.GUI.Converter"
+        Title="{Binding Path=Name}" Height="800" Width="600"
+        mc:Ignorable="d"
+        Closing="Window_Closing">
+    <Window.Resources>
+        <ResourceDictionary>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="Delete" Executed="Delete_Executed" CanExecute="Delete_CanExecute"></CommandBinding>
+        <CommandBinding Command="New" Executed="New_Executed" CanExecute="New_CanExecute"></CommandBinding>
+    </Window.CommandBindings>
+    <Grid Name="m_grid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
+            <RowDefinition/>
+            <RowDefinition Height="44"/>
+        </Grid.RowDefinitions>
+        <!--<Menu>
+            <MenuItem Header="New State" Command="New" CommandParameter="{Binding}"></MenuItem>
+        </Menu>-->
+
+        <gui:StateMachineControl DataContext="{Binding}">
+            
+        </gui:StateMachineControl>
+        <Grid Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="80">
+            <Button Click="Button_Click">Ok</Button>
+        </Grid>
+    </Grid>
+</Window>

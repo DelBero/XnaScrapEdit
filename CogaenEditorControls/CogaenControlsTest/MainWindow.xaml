@@ -1,0 +1,40 @@
+﻿<Window x:Class="CogaenControlsTest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:cec="clr-namespace:CogaenEditorControls;assembly=CogaenEditorControls"
+        xmlns:cc="clr-namespace:CogaenEditorControls.Controls;assembly=CogaenEditorControls"
+        xmlns:gui="clr-namespace:CogaenEditorControls.GUI_Elements;assembly=CogaenEditorControls"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d" 
+        d:DesignHeight="300" d:DesignWidth="300"
+             
+        Title="MainWindow" Height="470" Width="534">
+    <!--<Window.CommandBindings>
+        <CommandBinding Command="New" CanExecute="New_CanExecute" Executed="New_Executed"/>
+    </Window.CommandBindings>-->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="45"/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <cec:FloatParameterBox Grid.Row="0"
+                                x:Name="m_FloatParameterBox"
+                               Value="{Binding Path=Value, Mode=TwoWay}"
+                               Increment="{Binding Path=Increment, Mode=TwoWay}"
+                               MaxHeight="26"></cec:FloatParameterBox>
+        <StackPanel Grid.Row="1">
+        <cec:ComboParameterBox  x:Name="m_comboBox"></cec:ComboParameterBox>
+        <Button Click="Button_Click">Increment</Button></StackPanel>
+        <!--<cc:NavigationMeshControl Grid.Row="2"></cc:NavigationMeshControl>-->
+        <gui:StateMachineControl x:Name="m_stateMachineControl" Grid.Row="2"
+                                 Focusable="True"></gui:StateMachineControl>
+        <cc:ColorChooser Name="ColorChooser" Grid.Row="3" Color="{Binding Path=Col}"></cc:ColorChooser>
+        <cc:IntegerTextBox Grid.Row="4">1234</cc:IntegerTextBox>
+        <cc:FloatTextBox Grid.Row="5">123.4</cc:FloatTextBox>
+    </Grid>
+</Window>
